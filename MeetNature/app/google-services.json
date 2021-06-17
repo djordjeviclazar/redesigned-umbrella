@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1078965645788",
+    "firebase_url": "https://meetandnature-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "meetandnature",
+    "storage_bucket": "meetandnature.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1078965645788:android:a28d0114ae3f28eb0e1f19",
+        "android_client_info": {
+          "package_name": "com.example.meetnature"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1078965645788-kp07u0rl27ijqf46qjvto8bgkugq2v7v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxuKUM54mTIM-93Q-i2fmWnzhOGxQu6jM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1078965645788-kp07u0rl27ijqf46qjvto8bgkugq2v7v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
