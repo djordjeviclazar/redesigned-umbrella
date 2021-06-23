@@ -13,4 +13,10 @@
 
     <!-- Titles -->
     <string name="app_title">"Meet &amp; Nature"</string>
+    <string name="login_title">"Login"</string>
+    <string name="register_title">"Register"</string>
+
+    <!-- Links -->
+    <string name="RegisterLink">"Don't have an account?"</string>
+    <string name="LoginLink">"Already have an account?"</string>
 </resources>
