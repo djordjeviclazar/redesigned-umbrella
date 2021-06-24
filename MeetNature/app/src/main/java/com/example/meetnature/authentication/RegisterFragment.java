@@ -25,12 +25,10 @@ public class RegisterFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment RegisterFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static RegisterFragment newInstance(String param1, String param2) {
+    public static RegisterFragment newInstance(AuthenticationViewModel authenticationViewModel) {
         RegisterFragment fragment = new RegisterFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -42,6 +40,8 @@ public class RegisterFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
+            /*Bundle args = getArguments();
+            authenticationViewModel = (AuthenticationViewModel) args.getSerializable("viewModel");*/
         }
     }
 
