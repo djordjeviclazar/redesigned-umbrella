@@ -3,6 +3,7 @@ package com.example.meetnature.authentication;
 
 import androidx.annotation.NonNull;
 
+import com.example.meetnature.data.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -65,7 +66,7 @@ public class AuthenticationController implements Executor {
         }
     }
 
-    public FirebaseUser register(String email, String pass){
+    public FirebaseUser register(String email, String pass, User newUser){
         try {
             firebaseAuth.createUserWithEmailAndPassword(email, pass)
                     .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
@@ -76,6 +77,7 @@ public class AuthenticationController implements Executor {
                                 setCurrentUser(logedUser);
 
                                 // TO DO: Add method to store User info (Images, phone number, username, ...)
+                                // in UserRepo, or UserController
                             }
                             else {
                                 user = null;
