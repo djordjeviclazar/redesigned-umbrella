@@ -5,6 +5,8 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/main_fragment">
 
+
+    <!-- Main fragments -->
     <fragment
         android:id="@+id/main_fragment"
         android:name="com.example.meetnature.authentication.MainFragment"
@@ -36,5 +38,13 @@
         <action
             android:id="@+id/action_RegisterFragment_to_LoginFragment"
             app:destination="@id/login_fragment" />
+    </fragment>
+
+    <!-- Home fragments -->
+    <fragment
+        android:id="@+id/home_fragment"
+        android:name="com.example.meetnature.home.ui.main.HomeFragment"
+        android:label="Register Fragment"
+        tools:layout="@layout/fragment_register">
     </fragment>
 </navigation>

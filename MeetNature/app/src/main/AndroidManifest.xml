@@ -8,25 +8,20 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MeetNature"
-        >
+        android:theme="@style/Theme.MeetNature">
 
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
+        <activity android:name=".home.HomeActivity"></activity>
 
         <!-- NEBITNO -->
         <activity
-            android:name="com.example.meetnature.authentication.ui.login.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-
+            android:name=".authentication.ui.login.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
     </application>
 
 </manifest>

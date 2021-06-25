@@ -5,11 +5,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.meetnature.authentication.AuthenticationViewModel;
 import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
+import com.example.meetnature.home.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(FirebaseUser loginUser) {
                 if (loginUser != null){
                     Toast.makeText(MainActivity.this,"Uspesno", Toast.LENGTH_SHORT).show();
+                    Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                    startActivity(homeIntent);
                 }
                 else {
                     Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();

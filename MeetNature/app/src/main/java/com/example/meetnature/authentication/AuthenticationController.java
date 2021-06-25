@@ -65,6 +65,11 @@ public class AuthenticationController implements Executor {
         }
     }
 
+    public boolean logout(){
+        firebaseAuth.signOut();
+        return true;
+    }
+
     @Override
     public void execute(Runnable command) {
         command.run();
