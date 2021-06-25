@@ -65,8 +65,33 @@ public class AuthenticationController implements Executor {
         }
     }
 
+    public FirebaseUser register(String email, String pass){
+        try {
+            firebaseAuth.createUserWithEmailAndPassword(email, pass)
+                    .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                FirebaseUser logedUser = firebaseAuth.getCurrentUser();
+                                setCurrentUser(logedUser);
+
+                                // TO DO: Add method to store User info (Images, phone number, username, ...)
+                            }
+                            else {
+                                user = null;
+                            }
+                        }
+                    });
+            return user;
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
+
     public boolean logout(){
         firebaseAuth.signOut();
+        user = null;
         return true;
     }
 
