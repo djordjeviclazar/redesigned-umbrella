@@ -16,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserController {
 
-    private User user = null;
+    //private User user = null;
     private FirebaseUser firebaseUser = null;
     private static UserController instance = null;
     private DatabaseReference context;
@@ -35,31 +35,8 @@ public class UserController {
         }
     }
 
-    public User getUser(){
-        if (user != null){
-            return user;
-        }
-        else {
-            if (firebaseUser != null){
-                try
-                {
-                    context.child(firebaseUser.getUid()).limitToFirst(1).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
-                        @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            user = dataSnapshot.getValue(User.class);
-                        }
-                    });
-                }
-                catch (Exception e){
-                    User newUser = new User();
-                    return newUser;
-                }
-            }
-            else {
-                return null;
-            }
-        }
-        return null;
+    public void getUser(OnSuccessListener<DataSnapshot> callback){
+        context.child(firebaseUser.getUid()).get().addOnSuccessListener(callback);
     }
 
     public void setFirebaseUser(FirebaseUser firebaseUser){

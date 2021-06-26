@@ -15,14 +15,17 @@ import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.home.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
     AuthenticationViewModel authenticationViewModel;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,17 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(FirebaseUser loginUser) {
                 if (loginUser != null){
                     UserController.getInstance().setFirebaseUser(loginUser);
-                    User user = UserController.getInstance().getUser();
-
-                    if(user == null){
-                        Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();
-                    }
-                    else {
-                        Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
-                        Toast.makeText(MainActivity.this, "Uspesno", Toast.LENGTH_SHORT).show();
-                        Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
-                        startActivity(homeIntent);
-                    }
+                    UserController.getInstance().getUser(new GetUserCallback());
                 }
                 else {
                     Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();
@@ -58,5 +51,23 @@ public class MainActivity extends AppCompatActivity {
 
     public AuthenticationViewModel getAuthViewModel(){
         return authenticationViewModel;
+    }
+
+    public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
+
+        @Override
+        public void onSuccess(DataSnapshot dataSnapshot) {
+             MainActivity.this.user = dataSnapshot.getValue(User.class);
+
+            if(user == null){
+                Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "Uspesno", Toast.LENGTH_SHORT).show();
+                Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                startActivity(homeIntent);
+            }
+        }
     }
 }
