@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Event {
 
-    private int id;
+    private String uId;
     private String eventName;
     private String description;
     private String imageUrl;
@@ -13,13 +13,16 @@ public class Event {
     private String tag;
     private int capacity;
     private List<SmallUser> attendants;
+    private double lat;
+    private double lon;
+    private String geoHash;
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return uId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(String uId) {
+        this.uId = uId;
     }
 
     public String getEventName() {
@@ -76,6 +79,30 @@ public class Event {
 
     public void setAttendants(List<SmallUser> attendants) {
         this.attendants = attendants;
+    }
+
+    public double getLat() {
+        return  lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public  double getLon() {
+        return lon;
+    }
+
+    public void setLon(double lon) {
+        this.lon = lon;
+    }
+
+    public String getGeoHash(){
+        return geoHash;
+    }
+
+    public  void setGeoHash(String geoHash){
+        this.geoHash = geoHash;
     }
 
 }

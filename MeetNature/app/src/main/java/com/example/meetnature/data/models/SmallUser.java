@@ -4,6 +4,7 @@ public class SmallUser {
 
     private String uid;
     private String username;
+    private String imageUrl;
 
     public String getUid() {
         return uid;
@@ -19,6 +20,14 @@ public class SmallUser {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 }
