@@ -10,15 +10,18 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Observable;
 import java.util.concurrent.Executor;
 
 public class AuthenticationController implements Executor {
     private FirebaseAuth firebaseAuth;
     private FirebaseUser user;
+    private Observable loginCompleted;
 
     private static AuthenticationController instance = null;
     private AuthenticationController(){
         firebaseAuth = FirebaseAuth.getInstance();
+        loginCompleted = new Observable();
     }
 
     public static AuthenticationController getInstance(){
@@ -44,25 +47,27 @@ public class AuthenticationController implements Executor {
         this.user = user;
     }
 
-    public FirebaseUser Login(String email, String pass){
+    public void Login(String email, String pass){
         try {
             firebaseAuth.signInWithEmailAndPassword(email, pass)
-                    .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(/*(Executor) this,*/ new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
                                 FirebaseUser logedUser = firebaseAuth.getCurrentUser();
                                 setCurrentUser(logedUser);
+                                loginCompleted.notifyObservers(logedUser);
                             }
                             else {
-                                user = null;
+                                setCurrentUser(null);
+                                loginCompleted.notifyObservers();
                             }
                         }
                     });
-            return user;
         }
         catch (Exception e) {
-            return null;
+            setCurrentUser(null);
+            loginCompleted.notifyObservers();
         }
     }
 
@@ -100,5 +105,13 @@ public class AuthenticationController implements Executor {
     @Override
     public void execute(Runnable command) {
         command.run();
+    }
+
+    public Observable getLoginCompleted(){
+        return loginCompleted;
+    }
+
+    public FirebaseAuth getFirebaseAuth(){
+        return firebaseAuth;
     }
 }
