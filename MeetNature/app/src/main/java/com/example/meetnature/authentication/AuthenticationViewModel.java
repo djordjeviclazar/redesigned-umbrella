@@ -56,6 +56,30 @@ public class AuthenticationViewModel extends ViewModel {
         }
     }
 
+    public void registerUser(LoginUserDTO loginUserDTO){
+        AuthenticationController authenticationController = AuthenticationController.getInstance();
+
+        FirebaseAuth firebaseAuth = authenticationController.getFirebaseAuth();
+        try {
+            firebaseAuth.createUserWithEmailAndPassword(loginUserDTO.email, loginUserDTO.password)
+                    .addOnCompleteListener(/*(Executor) this,*/ new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()){
+                                FirebaseUser logedUser = firebaseAuth.getCurrentUser();
+                                loginUserDTOMutableLiveData.postValue(logedUser);
+                            }
+                            else {
+                                loginUserDTOMutableLiveData.postValue(null);
+                            }
+                        }
+                    });
+        }
+        catch (Exception e) {
+            loginUserDTOMutableLiveData.postValue(null);
+        }
+    }
+
     public class LoginObserver implements Observer{
 
         @Override

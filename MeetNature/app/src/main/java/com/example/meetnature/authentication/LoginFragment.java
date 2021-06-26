@@ -28,8 +28,6 @@ import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
  */
 public class LoginFragment extends Fragment {
 
-    AuthenticationViewModel authenticationViewModel;
-
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -59,7 +57,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        authenticationViewModel = ((MainActivity)getActivity()).getAuthViewModel();
+        AuthenticationViewModel authenticationViewModel = ((MainActivity)getActivity()).getAuthViewModel();
         view.findViewById(R.id.RegisterTextLink).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
