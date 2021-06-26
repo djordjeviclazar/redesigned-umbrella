@@ -11,6 +11,8 @@ import android.widget.Toast;
 
 import com.example.meetnature.authentication.AuthenticationViewModel;
 import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
+import com.example.meetnature.controllers.UserController;
+import com.example.meetnature.data.models.User;
 import com.example.meetnature.home.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -31,9 +33,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChanged(FirebaseUser loginUser) {
                 if (loginUser != null){
-                    Toast.makeText(MainActivity.this,"Uspesno", Toast.LENGTH_SHORT).show();
-                    Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
-                    startActivity(homeIntent);
+                    UserController.getInstance().setFirebaseUser(loginUser);
+                    User user = UserController.getInstance().getUser();
+
+                    if(user == null){
+                        Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "Uspesno", Toast.LENGTH_SHORT).show();
+                        Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                        startActivity(homeIntent);
+                    }
                 }
                 else {
                     Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();
