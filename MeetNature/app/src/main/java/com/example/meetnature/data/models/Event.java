@@ -13,6 +13,8 @@ public class Event {
     private String tag;
     private int capacity;
     private List<SmallUser> attendants;
+    private List<SmallUser> followers;
+    private SmallUser organizer;
     private double lat;
     private double lon;
     private String geoHash;
@@ -79,6 +81,22 @@ public class Event {
 
     public void setAttendants(List<SmallUser> attendants) {
         this.attendants = attendants;
+    }
+
+    public List<SmallUser> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(List<SmallUser> followers) {
+        this.followers = followers;
+    }
+
+    public SmallUser getOrganizer(){
+        return organizer;
+    }
+
+    public  void setOrganizer(SmallUser organizer){
+        this.organizer = organizer;
     }
 
     public double getLat() {
