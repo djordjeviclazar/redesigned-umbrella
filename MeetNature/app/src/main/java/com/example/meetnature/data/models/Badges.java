@@ -6,6 +6,15 @@ public class Badges {
     private int level;
     private int value;
 
+    public Badges() {
+
+        this.tag = "";
+        this.level = 0;
+        this.value = 0;
+
+    }
+
+
     public String getTag() {
         return tag;
     }

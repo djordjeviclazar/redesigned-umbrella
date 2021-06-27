@@ -1,5 +1,6 @@
 package com.example.meetnature.data.models;
 
+import java.util.Collections;
 import java.util.List;
 
 public class User {
@@ -17,6 +18,24 @@ public class User {
     private List<SmallUser> followers;
     private double lat;
     private double lon;
+
+
+    public User(){
+
+        this.username = "";
+        this.email = "";
+        this.info = "";
+        this.imageUrl = "";
+        this.score = 0;
+        this.badges = Collections.emptyList();
+        this.followingEvents = Collections.emptyList();
+        this.friends = Collections.emptyList();
+        this.following = Collections.emptyList();
+        this.followers = Collections.emptyList();
+        this.lat = 0;
+        this.lon = 0;
+
+    }
 
 
     public String getUid() {

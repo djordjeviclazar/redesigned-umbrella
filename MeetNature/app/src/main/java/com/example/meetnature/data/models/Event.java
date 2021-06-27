@@ -1,5 +1,6 @@
 package com.example.meetnature.data.models;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -18,6 +19,21 @@ public class Event {
     private double lat;
     private double lon;
     private String geoHash;
+
+    public Event() {
+        this.eventName = "";
+        this.description = "";
+        this.imageUrl = "";
+        this.time = null;
+        this.tag = "";
+        this.capacity = 0;
+        this.attendants = Collections.emptyList();
+        this.followers = Collections.emptyList();
+        this.organizer = new SmallUser();
+        this.lat = 0;
+        this.lon = 0;
+        this.geoHash = "";
+    }
 
     public String getId() {
         return uId;

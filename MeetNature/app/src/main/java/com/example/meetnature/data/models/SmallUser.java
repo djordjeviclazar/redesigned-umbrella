@@ -6,6 +6,13 @@ public class SmallUser {
     private String username;
     private String imageUrl;
 
+    public SmallUser() {
+
+        this.username = "";
+        this.imageUrl = "";
+
+    }
+
     public String getUid() {
         return uid;
     }

@@ -1,5 +1,6 @@
 package com.example.meetnature.data.models;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ArchivedUser {
@@ -8,6 +9,14 @@ public class ArchivedUser {
     private List<Event> organizedEvents;
     private List<Event> visitedEvents;
     private List<Event> followedEvents;
+
+    public ArchivedUser() {
+
+        this.organizedEvents = Collections.emptyList();
+        this.visitedEvents = Collections.emptyList();
+        this.followedEvents = Collections.emptyList();
+
+    }
 
     public String getUid() {
         return uid;

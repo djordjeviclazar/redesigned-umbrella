@@ -10,6 +10,15 @@ public class SmallEvent {
     private Date time;
     private String imageUrl;
 
+    private SmallEvent() {
+
+        this.eventName = "";
+        this.tag = "";
+        this.time = null;
+        this.imageUrl = "";
+
+    }
+
 
     public String getId() {
         return uId;
