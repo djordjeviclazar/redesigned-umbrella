@@ -71,15 +71,15 @@
 
     <LinearLayout
         android:id="@+id/events_list_layout"
-        android:layout_width="380dp"
-        android:layout_height="364dp"
+        android:layout_width="392dp"
+        android:layout_height="286dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.516"
+        app:layout_constraintHorizontal_bias="0.473"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_info_card"
-        app:layout_constraintVertical_bias="0.17" />
+        app:layout_constraintVertical_bias="0.646" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_event_btn"
@@ -94,6 +94,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/events_list_layout"
         app:layout_constraintVertical_bias="0.407" />
+
+    <TextView
+        android:id="@+id/info_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/user_info_card"
+        app:layout_constraintVertical_bias="0.062" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

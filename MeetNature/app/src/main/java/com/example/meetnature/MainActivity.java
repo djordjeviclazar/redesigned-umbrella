@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         return authenticationViewModel;
     }
 
+    public User getUser() {return user;}
+
     public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
 
         @Override
@@ -66,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this, "Uspesno", Toast.LENGTH_SHORT).show();
                 Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
+                homeIntent.putExtra("User", user);
                 startActivity(homeIntent);
+
             }
         }
     }

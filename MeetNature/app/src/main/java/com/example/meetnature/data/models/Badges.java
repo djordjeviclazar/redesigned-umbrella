@@ -1,6 +1,8 @@
 package com.example.meetnature.data.models;
 
-public class Badges {
+import java.io.Serializable;
+
+public class Badges implements Serializable {
 
     private String tag;
     private int level;

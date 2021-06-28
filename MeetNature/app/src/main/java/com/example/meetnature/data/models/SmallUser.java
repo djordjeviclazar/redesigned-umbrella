@@ -1,6 +1,8 @@
 package com.example.meetnature.data.models;
 
-public class SmallUser {
+import java.io.Serializable;
+
+public class SmallUser implements Serializable {
 
     private String uid;
     private String username;

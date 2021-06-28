@@ -9,8 +9,15 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
+import com.example.meetnature.authentication.AuthenticationViewModel;
+import com.example.meetnature.controllers.UserController;
+import com.example.meetnature.data.models.User;
+import com.example.meetnature.home.HomeActivity;
+import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +77,22 @@ public class UserProfileFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        
+
+
+        View usernameTextView = view.findViewById(R.id.username_lbl);
+        View infoTextView = view.findViewById(R.id.info_lbl);
+        View userProfileImage = view.findViewWithTag(R.id.user_profile_img);
+        View badgesListLayout = view.findViewById(R.id.badges_list_layout);
+        View eventsListLayout = view.findViewById(R.id.events_list_layout);
+
+        //User user = ((MainActivity)getActivity()).getUser();
+        User user = ((HomeActivity)getActivity()).getUser();
+
+
+
+        ((TextView) usernameTextView).setText(user.getUsername());
+        ((TextView) infoTextView).setText(user.getInfo());
+        ((TextView) userProfileImage).setText(user.getImageUrl());
+
     }
 }

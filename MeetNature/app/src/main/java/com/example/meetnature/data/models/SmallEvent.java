@@ -1,8 +1,9 @@
 package com.example.meetnature.data.models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class SmallEvent {
+public class SmallEvent implements Serializable {
 
     private String uId;
     private String eventName;
