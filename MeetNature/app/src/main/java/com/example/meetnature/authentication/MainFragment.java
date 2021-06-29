@@ -83,8 +83,10 @@ public class MainFragment extends Fragment {
 
         @Override
         public void NavigateToActivity() {
-            NavHostFragment.findNavController(MainFragment.this)
+            /*NavHostFragment.findNavController(MainFragment.this)
                     .navigate(R.id.action_MainFragment_to_HomeActivity);
+                    
+             */
         }
     }
 }
