@@ -84,8 +84,6 @@ public class AuthenticationViewModel extends ViewModel {
                                 user.setUid(logedUser.getUid());
 
                                 userController.addNewUser(user, new RegisteredUserChildEventListener(logedUser));
-
-
                             }
                             else {
                                 loginUserDTOMutableLiveData.postValue(null);
@@ -110,15 +108,14 @@ public class AuthenticationViewModel extends ViewModel {
     public class RegisteredUserChildEventListener implements ChildEventListener {
 
         private FirebaseUser logedUser;
+
         public RegisteredUserChildEventListener(FirebaseUser logedUser){
             this.logedUser = logedUser;
         }
 
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
             loginUserDTOMutableLiveData.postValue(logedUser);
-
         }
 
         @Override

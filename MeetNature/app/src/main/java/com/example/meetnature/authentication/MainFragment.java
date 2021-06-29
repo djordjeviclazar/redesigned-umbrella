@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 
 /**
@@ -74,5 +75,16 @@ public class MainFragment extends Fragment {
                         .navigate(R.id.action_MainFragment_to_RegisterFragment);
             }
         });
+
+        ((MainActivity) getActivity()).setLogedUserCallback(new MainFragmentLogedUserCallback());
+    }
+
+    public class MainFragmentLogedUserCallback implements MainActivity.LogedUserCallback{
+
+        @Override
+        public void NavigateToActivity() {
+            NavHostFragment.findNavController(MainFragment.this)
+                    .navigate(R.id.action_MainFragment_to_HomeActivity);
+        }
     }
 }

@@ -13,7 +13,6 @@ import com.example.meetnature.authentication.AuthenticationViewModel;
 import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
-import com.example.meetnature.home.HomeActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -26,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
 
     AuthenticationViewModel authenticationViewModel;
     User user;
+
+    private LogedUserCallback logedUserCallback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +56,10 @@ public class MainActivity extends AppCompatActivity {
 
     public User getUser() {return user;}
 
+    public void setLogedUserCallback(LogedUserCallback logedUserCallback){
+        this.logedUserCallback = logedUserCallback;
+    }
+
     public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
 
         @Override
@@ -67,11 +72,21 @@ public class MainActivity extends AppCompatActivity {
             else {
                 Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this, "Uspesno", Toast.LENGTH_SHORT).show();
+
+                /*
                 Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
                 homeIntent.putExtra("User", user);
                 startActivity(homeIntent);
 
+                 */
+                //if(logedUserCallback != null) {
+                //logedUserCallback.NavigateToActivity();
+                //}
             }
         }
+    }
+
+    public interface LogedUserCallback {
+        public void NavigateToActivity();
     }
 }

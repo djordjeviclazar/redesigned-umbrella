@@ -40,15 +40,12 @@ public class UserController {
     }
 
     public void setFirebaseUser(FirebaseUser firebaseUser){
-
         this.firebaseUser = firebaseUser;
-
     }
 
     public void addNewUser(User user, ChildEventListener callback){
         context.addChildEventListener(callback);
         context.child(user.getUid()).setValue(user);
-
     }
 
 }

@@ -15,6 +15,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -38,6 +40,12 @@ dependencies {
     //firebase
     implementation 'com.google.firebase:firebase-database:20.0.0'
     implementation 'com.google.firebase:firebase-auth:21.0.1'
+
+    //osmdroid
+    implementation 'org.osmdroid:osmdroid-android:6.1.1'
+
+    //multidex
+    implementation 'com.android.support:multidex:1.0.3'
     
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'

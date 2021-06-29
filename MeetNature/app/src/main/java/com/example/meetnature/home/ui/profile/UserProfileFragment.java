@@ -13,11 +13,7 @@ import android.widget.TextView;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
-import com.example.meetnature.authentication.AuthenticationViewModel;
-import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
-import com.example.meetnature.home.HomeActivity;
-import com.google.firebase.database.FirebaseDatabase;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -85,8 +81,7 @@ public class UserProfileFragment extends Fragment {
         View badgesListLayout = view.findViewById(R.id.badges_list_layout);
         View eventsListLayout = view.findViewById(R.id.events_list_layout);
 
-        //User user = ((MainActivity)getActivity()).getUser();
-        User user = ((HomeActivity)getActivity()).getUser();
+        User user = ((MainActivity)getActivity()).getUser();
 
 
 
