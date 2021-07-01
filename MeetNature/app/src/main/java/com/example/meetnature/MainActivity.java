@@ -1,23 +1,18 @@
 package com.example.meetnature;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.meetnature.authentication.AuthenticationViewModel;
-import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.example.meetnature.home.ui.main.HomeFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
@@ -25,6 +20,7 @@ public class MainActivity extends AppCompatActivity {
 
     AuthenticationViewModel authenticationViewModel;
     User user;
+    FragmentManager mainFragmentManager;
 
     private LogedUserCallback logedUserCallback;
 
@@ -32,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        mainFragmentManager = getSupportFragmentManager();
         authenticationViewModel = new ViewModelProvider(this).get(AuthenticationViewModel.class);
         authenticationViewModel.loginUserDTOMutableLiveData.observe(this, new Observer<FirebaseUser>() {
             @Override
@@ -55,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public User getUser() {return user;}
+
+    public FragmentManager getMainFragmentManager() {return mainFragmentManager;}
 
     public void setLogedUserCallback(LogedUserCallback logedUserCallback){
         this.logedUserCallback = logedUserCallback;
@@ -82,6 +81,11 @@ public class MainActivity extends AppCompatActivity {
                 //if(logedUserCallback != null) {
                 //logedUserCallback.NavigateToActivity();
                 //}
+
+                mainFragmentManager.beginTransaction().replace(R.id.main_fragment_container, HomeFragment.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
             }
         }
     }

@@ -46,6 +46,20 @@
         android:name="com.example.meetnature.home.ui.main.HomeFragment"
         android:label="Register Fragment"
         tools:layout="@layout/fragment_register">
+        <action
+            android:id="@+id/action_HomeFragment_to_AddEventFragment"
+            app:destination="@+id/add_event_fragment" />
+
+        <action
+            android:id="@+id/action_HomeFragment_to_UserProfileFragment"
+            app:destination="@+id/user_profile_fragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/add_event_fragment"
+        android:name="com.example.meetnature.home.ui.addevent.AddEventFragment"
+        android:label="Add Event Fragment"
+        tools:layout="@layout/add_event_fragment">
     </fragment>
 
     <fragment
@@ -53,8 +67,5 @@
         android:name="com.example.meetnature.home.ui.profile.UserProfileFragment"
         android:label="User Profile Fragment"
         tools:layout="@layout/user_profile_fragment">
-        <action
-            android:id="@+id/action_HomeFragment_to_UserProfileFragment"
-            app:destination="@+id/user_profile_fragment" />
     </fragment>
 </navigation>

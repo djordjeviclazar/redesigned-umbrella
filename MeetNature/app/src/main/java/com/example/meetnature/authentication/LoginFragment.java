@@ -83,8 +83,11 @@ public class LoginFragment extends Fragment {
 
         @Override
         public void NavigateToActivity() {
+            /*
             NavHostFragment.findNavController(LoginFragment.this)
                     .navigate(R.id.action_LoginFragment_to_HomeActivity);
+
+             */
         }
     }
 }
