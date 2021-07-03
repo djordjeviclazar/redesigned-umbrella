@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.meetnature.MainActivity;
@@ -66,13 +68,28 @@ public class UserProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.user_profile_fragment, container, false);
+        View root = inflater.inflate(R.layout.user_profile_fragment, container, false);
+
+        /*View usernameTextView = root.findViewById(R.id.username_lbl);
+        View infoTextView = root.findViewById(R.id.info_lbl);
+        View userProfileImage = root.findViewWithTag(R.id.user_profile_img);
+        View badgesListLayout = root.findViewById(R.id.badges_list_layout);
+        View eventsListLayout = root.findViewById(R.id.events_list_layout);
+
+        User user = ((MainActivity)getActivity()).getUser();
+
+
+
+        ((TextView) usernameTextView).setText(user.getUsername());
+        ((TextView) infoTextView).setText(user.getInfo());
+        //((ImageView) userProfileImage).(user.getImageUrl());
+        */
+        return root;
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
 
 
         View usernameTextView = view.findViewById(R.id.username_lbl);
@@ -87,7 +104,8 @@ public class UserProfileFragment extends Fragment {
 
         ((TextView) usernameTextView).setText(user.getUsername());
         ((TextView) infoTextView).setText(user.getInfo());
-        ((TextView) userProfileImage).setText(user.getImageUrl());
+        //((ImageView) userProfileImage).(user.getImageUrl());
+
 
     }
 }

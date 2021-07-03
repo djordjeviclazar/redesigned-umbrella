@@ -8,43 +8,16 @@
     tools:context="com.example.meetnature.home.ui.main.HomeFragment">
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Logout"
-        android:id="@+id/home_logout_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.10"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1">
-    </Button>
-
-    <Button
         android:id="@+id/profile_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Profile"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintHorizontal_bias="0.908"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1"
-        />
-
-    <TextView
-        android:id="@+id/WelcomeText_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.1"
-        app:layout_constraintHorizontal_bias="0.5"
-        />
+        app:layout_constraintVertical_bias="0.023" />
 
     <EditText
         android:id="@+id/homepage_homefragment_eventtagsearch_txb"
@@ -52,11 +25,11 @@
         android:layout_height="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.513"
         app:layout_constraintStart_toStartOf="parent"
 
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.20" />
+        app:layout_constraintVertical_bias="0.123" />
 
     <Button
         android:id="@+id/homepage_homefragment_searchaction_btn"
@@ -65,36 +38,58 @@
         android:text="@string/Search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homepage_homefragment_eventtagsearch_txb"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintVertical_bias="0.05" />
+        app:layout_constraintVertical_bias="0.043" />
+
+    <TextView
+        android:id="@+id/WelcomeText_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.026" />
+
+    <Button
+        android:id="@+id/home_logout_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Logout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.023"></Button>
 
     <org.osmdroid.views.MapView
         android:id="@+id/homepage_homefragment_map"
         tilesource="Mapnik"
-        android:layout_width="350dp"
-        android:layout_height="300dp"
+        android:layout_width="393dp"
+        android:layout_height="284dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homepage_homefragment_searchaction_btn"
-        app:layout_constraintVertical_bias="0.197" />
+        app:layout_constraintVertical_bias="0.084" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/homepage_homefragment_floatmap_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/homepage_homefragment_searchaction_btn"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintVertical_bias="0.9"
-        android:layout_margin="@dimen/fab_margin"
-        />
+        app:layout_constraintTop_toBottomOf="@+id/homepage_homefragment_searchaction_btn"
+        app:layout_constraintVertical_bias="0.757" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

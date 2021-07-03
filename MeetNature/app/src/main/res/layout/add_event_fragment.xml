@@ -13,9 +13,10 @@
         android:layout_height="161dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.428"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+        app:layout_constraintVertical_bias="0.736" />
 
     <ImageButton
         android:id="@+id/add_event_image_btn"
@@ -45,17 +46,17 @@
 
     <EditText
         android:id="@+id/add_event_description_tbx"
-        android:layout_width="384dp"
-        android:layout_height="122dp"
+        android:layout_width="381dp"
+        android:layout_height="80dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintHorizontal_bias="0.566"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.353" />
+        app:layout_constraintVertical_bias="0.321" />
 
     <EditText
         android:id="@+id/add_event_tags_tbx"
@@ -66,10 +67,10 @@
         android:text="Tags"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintHorizontal_bias="0.084"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.523" />
+        app:layout_constraintVertical_bias="0.438" />
 
     <Button
         android:id="@+id/add_event_change_location_btn"
@@ -78,10 +79,10 @@
         android:text="Change location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.05"
+        app:layout_constraintHorizontal_bias="0.072"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" />
+        app:layout_constraintVertical_bias="0.53" />
 
     <Button
         android:id="@+id/add_event_add_btn"
@@ -92,7 +93,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.976" />
+        app:layout_constraintVertical_bias="0.86" />
 
     <EditText
         android:id="@+id/add_event_date_tbx"
