@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".home.ui.viewevent.ViewEventFragment" >
+    tools:context=".home.ui.viewevent.ViewEventFragment">
 
     <TextView
         android:id="@+id/event_tags_lbl"
@@ -20,6 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/event_tags"
@@ -40,17 +41,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:src="@tools:sample/backgrounds/scenic" />
-
-    <com.google.android.gms.maps.MapView
-        android:id="@+id/event_map"
-        android:layout_width="404dp"
-        android:layout_height="193dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.786" />
 
     <Button
         android:id="@+id/event_going_btn"
@@ -136,6 +126,7 @@
         app:layout_constraintVertical_bias="0.066" />
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/event_country"
@@ -224,5 +215,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.341" />
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/homepage_homefragment_map"
+        tilesource="Mapnik"
+        android:layout_width="407dp"
+        android:layout_height="192dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.787" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
