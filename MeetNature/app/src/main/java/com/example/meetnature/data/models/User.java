@@ -11,6 +11,7 @@ public class User implements Serializable {
     private String email;
     private String info;
     private String imageUrl;
+    private int phoneNumber;
     private int score;
     private List<Badges> badges;
     private List<SmallEvent> organizingEvents;
@@ -29,6 +30,7 @@ public class User implements Serializable {
         this.info = "";
         this.imageUrl = "";
         this.score = 0;
+        this.phoneNumber = 0;
         this.badges = Collections.emptyList();
         this.followingEvents = Collections.emptyList();
         this.friends = Collections.emptyList();
@@ -79,6 +81,10 @@ public class User implements Serializable {
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
+
+    public int getPhoneNumber() { return phoneNumber; }
+
+    public void setPhoneNumber( int phoneNumber ) { this.phoneNumber = phoneNumber; }
 
     public int getScore() {
         return score;
