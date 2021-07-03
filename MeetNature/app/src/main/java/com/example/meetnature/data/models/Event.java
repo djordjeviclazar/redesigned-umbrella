@@ -9,11 +9,15 @@ public class Event {
     private String uId;
     private String eventName;
     private String description;
+    private String place;
+    private String city;
+    private String country;
     private String imageUrl;
     private Date time;
     private boolean finished;
-    private String tag;
+    private List<String> tag;
     private int capacity;
+    private int followersCount;
     private List<SmallUser> attendants;
     private List<SmallUser> followers;
     private SmallUser organizer;
@@ -26,7 +30,7 @@ public class Event {
         this.description = "";
         this.imageUrl = "";
         this.time = null;
-        this.tag = "";
+        this.tag = Collections.emptyList();
         this.capacity = 0;
         this.attendants = Collections.emptyList();
         this.followers = Collections.emptyList();
@@ -60,6 +64,30 @@ public class Event {
         this.description = description;
     }
 
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -84,11 +112,11 @@ public class Event {
         this.finished = finished;
     }
 
-    public String getTag() {
+    public List<String> getTag() {
         return tag;
     }
 
-    public void setTag(String tag) {
+    public void setTag(List<String> tag) {
         this.tag = tag;
     }
 
@@ -98,6 +126,14 @@ public class Event {
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
+    }
+
+    public int getFollowersCount() {
+        return followersCount;
+    }
+
+    public void setFollowersCount(int followersCount) {
+        this.followersCount = followersCount;
     }
 
     public List<SmallUser> getAttendants() {
@@ -147,5 +183,4 @@ public class Event {
     public  void setGeoHash(String geoHash){
         this.geoHash = geoHash;
     }
-
 }
