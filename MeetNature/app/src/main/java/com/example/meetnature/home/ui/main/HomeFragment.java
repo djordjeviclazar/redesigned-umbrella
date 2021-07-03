@@ -131,6 +131,7 @@ public class HomeFragment extends Fragment {
                 Toast.makeText(getActivity(), "LogedOut", Toast.LENGTH_SHORT).show();
                 //finish();
                 // TODO: Return to Login
+                mainFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
                 getActivity().recreate();
             }
         });

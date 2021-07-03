@@ -2,9 +2,12 @@ package com.example.meetnature.controllers;
 
 import androidx.annotation.NonNull;
 
+import com.example.meetnature.data.models.Event;
+import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -16,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserController {
 
-    //private User user = null;
+    private User user = null;
     private FirebaseUser firebaseUser = null;
     private static UserController instance = null;
     private DatabaseReference context;
@@ -36,16 +39,44 @@ public class UserController {
     }
 
     public void getUser(OnSuccessListener<DataSnapshot> callback){
-        context.child(firebaseUser.getUid()).get().addOnSuccessListener(callback);
+        Task<DataSnapshot> task = context.child(firebaseUser.getUid()).get();
+        task.addOnSuccessListener(callback);
     }
 
     public void setFirebaseUser(FirebaseUser firebaseUser){
         this.firebaseUser = firebaseUser;
     }
 
-    public void addNewUser(User user, ChildEventListener callback){
-        context.addChildEventListener(callback);
-        context.child(user.getUid()).setValue(user);
+    public void addNewUser(User user, OnSuccessListener callback){
+        context.child(user.getUid()).setValue(user).addOnSuccessListener(callback);
+    }
+
+    public void addEvent(User user, Event event, OnSuccessListener callback){
+        SmallEvent smallEvent = new SmallEvent();
+        smallEvent.setId(event.getId());
+        smallEvent.setEventName(event.getEventName());
+        smallEvent.setGeoHash(event.getGeoHash());
+        smallEvent.setImageUrl(event.getEventName());
+        smallEvent.setLat(event.getLat());
+        smallEvent.setLon(event.getLon());
+        smallEvent.setTag(event.getTag());
+        smallEvent.setTime(event.getTime());
+
+        context.child(user.getUid()).child("organizingEvents").child(event.getId()).setValue(smallEvent).addOnSuccessListener(callback);
+    }
+
+    public void followEvent(int uid, Event event, OnSuccessListener callback){
+        SmallEvent smallEvent = new SmallEvent();
+        smallEvent.setId(event.getId());
+        smallEvent.setEventName(event.getEventName());
+        smallEvent.setGeoHash(event.getGeoHash());
+        smallEvent.setImageUrl(event.getEventName());
+        smallEvent.setLat(event.getLat());
+        smallEvent.setLon(event.getLon());
+        smallEvent.setTag(event.getTag());
+        smallEvent.setTime(event.getTime());
+
+        context.child(user.getUid()).child("followingEvents").child(event.getId()).setValue(smallEvent).addOnSuccessListener(callback);
     }
 
 }

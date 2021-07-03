@@ -13,13 +13,14 @@ public class User implements Serializable {
     private String imageUrl;
     private int score;
     private List<Badges> badges;
+    private List<SmallEvent> organizingEvents;
     private List<SmallEvent> followingEvents;
     private List<SmallUser> friends;
     private List<SmallUser> following;
     private List<SmallUser> followers;
     private double lat;
     private double lon;
-
+    private String geoHash;
 
     public User(){
 
@@ -93,6 +94,14 @@ public class User implements Serializable {
 
     public void setBadges(List<Badges> badges) {
         this.badges = badges;
+    }
+
+    public List<SmallEvent> getOrganizingEventsEvents() {
+        return organizingEvents;
+    }
+
+    public void setOrganizingEvents(List<SmallEvent> followingEvents) {
+        this.organizingEvents = followingEvents;
     }
 
     public List<SmallEvent> getFollowingEvents() {

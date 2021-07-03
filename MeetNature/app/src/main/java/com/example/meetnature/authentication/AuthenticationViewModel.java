@@ -9,6 +9,7 @@ import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -83,7 +84,7 @@ public class AuthenticationViewModel extends ViewModel {
                                 user.setUsername(loginUserDTO.username);
                                 user.setUid(logedUser.getUid());
 
-                                userController.addNewUser(user, new RegisteredUserChildEventListener(logedUser));
+                                userController.addNewUser(user, new RegisteredUserSuccesListener(logedUser));
                             }
                             else {
                                 loginUserDTOMutableLiveData.postValue(null);
@@ -105,37 +106,17 @@ public class AuthenticationViewModel extends ViewModel {
         }
     }
 
-    public class RegisteredUserChildEventListener implements ChildEventListener {
+    public class RegisteredUserSuccesListener implements OnSuccessListener{
 
         private FirebaseUser logedUser;
 
-        public RegisteredUserChildEventListener(FirebaseUser logedUser){
+        public RegisteredUserSuccesListener(FirebaseUser logedUser){
             this.logedUser = logedUser;
         }
 
         @Override
-        public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+        public void onSuccess(Object o) {
             loginUserDTOMutableLiveData.postValue(logedUser);
-        }
-
-        @Override
-        public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-        }
-
-        @Override
-        public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-        }
-
-        @Override
-        public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-        }
-
-        @Override
-        public void onCancelled(@NonNull DatabaseError error) {
-
         }
     }
 }

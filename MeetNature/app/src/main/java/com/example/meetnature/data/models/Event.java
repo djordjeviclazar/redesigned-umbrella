@@ -11,6 +11,7 @@ public class Event {
     private String description;
     private String imageUrl;
     private Date time;
+    private boolean finished;
     private String tag;
     private int capacity;
     private List<SmallUser> attendants;
@@ -73,6 +74,14 @@ public class Event {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public boolean getFinished() {
+        return finished;
+    }
+
+    public void setFinished(boolean finished) {
+        this.finished = finished;
     }
 
     public String getTag() {
