@@ -16,6 +16,9 @@ import android.widget.TextView;
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 import com.example.meetnature.data.models.User;
+import com.squareup.picasso.Picasso;
+
+import com.example.meetnature.helpers.taksiDoBaze;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -94,12 +97,17 @@ public class UserProfileFragment extends Fragment {
 
         View usernameTextView = view.findViewById(R.id.username_lbl);
         View infoTextView = view.findViewById(R.id.info_lbl);
-        View userProfileImage = view.findViewWithTag(R.id.user_profile_img);
+        View userProfileImage = view.findViewById(R.id.user_profile_img);
         View badgesListLayout = view.findViewById(R.id.badges_list_layout);
         View eventsListLayout = view.findViewById(R.id.events_list_layout);
 
         User user = ((MainActivity)getActivity()).getUser();
-
+        if (user.getImageUrl().equals("")){
+            Picasso.get().load(taksiDoBaze.defaultImage).into((ImageView)userProfileImage);
+        }
+        else {
+            Picasso.get().load(user.getImageUrl()).into((ImageView)userProfileImage);
+        }
 
 
         ((TextView) usernameTextView).setText(user.getUsername());

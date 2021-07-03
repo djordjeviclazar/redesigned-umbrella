@@ -49,7 +49,10 @@ dependencies {
 
     //multidex
     implementation 'com.android.support:multidex:1.0.3'
-    
+
+    //picasso
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
     implementation 'androidx.annotation:annotation:1.1.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
