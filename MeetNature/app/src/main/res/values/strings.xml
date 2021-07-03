@@ -13,7 +13,16 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
+    <string name="event_name">Name: </string>
+    <string name="event_owner">Owner: </string>
+    <string name="event_country">Country: </string>
+    <string name="event_city">City: </string>
+    <string name="event_place">Place: </string>
+    <string name="event_date">Date n time:</string>
+    <string name="event_description">Description: </string>
+    <string name="event_tags">Tags: </string>
     <string name="edit_profile">Edit profile</string>
+    <string name="event_going">Going</string>
 
     <!-- Titles -->
     <string name="app_title">"Meet &amp; Nature"</string>
