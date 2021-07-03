@@ -6,6 +6,7 @@ import androidx.annotation.Nullable;
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallEvent;
+import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.helpers.taksiDoBaze;
 import com.firebase.geofire.GeoFireUtils;
@@ -37,15 +38,15 @@ public class EventController {
 
     private static EventController instance = null;
 
-    private EventController(MainActivity activity){
+    private EventController(){
         UserController.getInstance();
-        user = activity.getUser();
+        user = UserController.getInstance().getCurrentUser();
         context = FirebaseDatabase.getInstance(taksiDoBaze.dbURL).getReference().child("Event");
     }
 
-    public static EventController getInstance(MainActivity activity){
+    public static EventController getInstance(){
         if (instance == null){
-            instance = new EventController(activity);
+            instance = new EventController();
         }
 
         return instance;
@@ -55,16 +56,29 @@ public class EventController {
         String uid = context.push().getKey();
         event.setId(uid);
 
-        userController.addEvent(user, event, new SmallEventAddedCallback(uid, event, callback));
+        userController.addEvent(event, new SmallEventAddedCallback(uid, event, callback));
     }
 
-    public void getNearEvents(String currentGeoHash, double currentLat, double currentLon, ChildEventListener callback){
+    public void getEvent(String uid, OnSuccessListener<DataSnapshot> callback){
+        context.child(uid).get().addOnSuccessListener(callback);
+    }
+
+    public void followEvent(Event event, User user, OnSuccessListener callback){
+        SmallUser smallUser = new SmallUser();
+        smallUser.setUid(user.getUid());
+        smallUser.setUsername(user.getUsername());
+        smallUser.setImageUrl(user.getImageUrl());
+        context.child(event.getId()).child(user.getUid()).setValue(smallUser);
+        UserController.getInstance().followEvent(event, callback);
+    }
+
+    public void getNearEvents(String currentGeoHash, double currentLat, double currentLon, OnSuccessListener<DataSnapshot> callback){
         List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(new GeoLocation(currentLat, currentLon), 50);
         List<Task<DataSnapshot>> queries = new ArrayList<>();
         for(GeoQueryBounds bound : bounds){
             Query query = context.orderByChild("geoHash").startAt(bound.startHash).endAt(bound.endHash);
             //queries.add(query.get());
-            query.addChildEventListener(callback);
+            query.get().addOnSuccessListener(callback);
         }
 /*
         Tasks.whenAllSuccess(queries).addOnSuccessListener(new OnSuccessListener<List<Object>>() {

@@ -93,13 +93,6 @@ public class HomeFragment extends Fragment {
             setupMap();
         }
 
-        if(mapController != null)
-        {
-            mapController.setZoom(15.0);
-            GeoPoint startPoint = new GeoPoint(latNis, lonNis);
-            mapController.setCenter(startPoint);
-        }
-
 
         view.findViewById(R.id.homepage_homefragment_floatmap_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -161,6 +154,7 @@ public class HomeFragment extends Fragment {
         if (mapController != null){
             mapController.setZoom(15.0);
             myLocationNewOverlay.enableFollowLocation();
+            mapController.setCenter(myLocationNewOverlay.getMyLocation());
         }
     }
 }

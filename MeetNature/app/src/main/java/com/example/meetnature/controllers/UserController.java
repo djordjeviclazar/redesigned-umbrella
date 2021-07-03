@@ -43,15 +43,31 @@ public class UserController {
         task.addOnSuccessListener(callback);
     }
 
+    public void getUser(String uid, OnSuccessListener<DataSnapshot> callback){
+        Task<DataSnapshot> task = context.child(uid).get();
+        task.addOnSuccessListener(callback);
+    }
+
+    public User getCurrentUser(){
+        return user;
+    }
+
     public void setFirebaseUser(FirebaseUser firebaseUser){
+
         this.firebaseUser = firebaseUser;
+        context.child(firebaseUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                user = dataSnapshot.getValue(User.class);
+            }
+        });
     }
 
     public void addNewUser(User user, OnSuccessListener callback){
         context.child(user.getUid()).setValue(user).addOnSuccessListener(callback);
     }
 
-    public void addEvent(User user, Event event, OnSuccessListener callback){
+    public void addEvent(Event event, OnSuccessListener callback){
         SmallEvent smallEvent = new SmallEvent();
         smallEvent.setId(event.getId());
         smallEvent.setEventName(event.getEventName());
@@ -59,13 +75,12 @@ public class UserController {
         smallEvent.setImageUrl(event.getEventName());
         smallEvent.setLat(event.getLat());
         smallEvent.setLon(event.getLon());
-        smallEvent.setTag(event.getTag());
         smallEvent.setTime(event.getTime());
 
         context.child(user.getUid()).child("organizingEvents").child(event.getId()).setValue(smallEvent).addOnSuccessListener(callback);
     }
 
-    public void followEvent(int uid, Event event, OnSuccessListener callback){
+    public void followEvent(Event event, OnSuccessListener callback){
         SmallEvent smallEvent = new SmallEvent();
         smallEvent.setId(event.getId());
         smallEvent.setEventName(event.getEventName());
@@ -73,7 +88,6 @@ public class UserController {
         smallEvent.setImageUrl(event.getEventName());
         smallEvent.setLat(event.getLat());
         smallEvent.setLon(event.getLon());
-        smallEvent.setTag(event.getTag());
         smallEvent.setTime(event.getTime());
 
         context.child(user.getUid()).child("followingEvents").child(event.getId()).setValue(smallEvent).addOnSuccessListener(callback);
