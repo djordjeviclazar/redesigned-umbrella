@@ -102,7 +102,7 @@ public class User implements Serializable {
         this.badges = badges;
     }
 
-    public List<SmallEvent> getOrganizingEventsEvents() {
+    public List<SmallEvent> getOrganizingEvents() {
         return organizingEvents;
     }
 

@@ -9,16 +9,20 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
+import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
 import com.squareup.picasso.Picasso;
 
 import com.example.meetnature.helpers.taksiDoBaze;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -83,15 +87,15 @@ public class UserProfileFragment extends Fragment {
         View usernameTextView = view.findViewById(R.id.username_lbl);
         View infoTextView = view.findViewById(R.id.info_lbl);
         View userProfileImage = view.findViewById(R.id.user_profile_img);
-        View badgesListLayout = view.findViewById(R.id.badges_list_layout);
-        View eventsListLayout = view.findViewById(R.id.events_list_layout);
+        ListView badgesListLayout = view.findViewById(R.id.badges_list_layout);
+        ListView eventsListLayout = view.findViewById(R.id.events_list_layout);
 
         User user = ((MainActivity)getActivity()).getUser();
         if (user.getImageUrl().equals("")){
-            Picasso.get().load(taksiDoBaze.defaultImage).into((ImageView)userProfileImage);
+            Picasso.get().load(taksiDoBaze.defaultImage).resize(200, 200).into((ImageView)userProfileImage);
         }
         else {
-            Picasso.get().load(user.getImageUrl()).into((ImageView)userProfileImage);
+            Picasso.get().load(user.getImageUrl()).resize(200, 200).into((ImageView)userProfileImage);
         }
 
 
@@ -99,6 +103,13 @@ public class UserProfileFragment extends Fragment {
         ((TextView) infoTextView).setText(user.getInfo());
         //((ImageView) userProfileImage).(user.getImageUrl());
 
+        // Print events:
+        if (user.getOrganizingEvents() != null) {
+            List<SmallEvent> smallEvents = user.getOrganizingEvents();
 
+            ArrayList<SmallEvent> param = new ArrayList<>();
+            param.addAll(smallEvents);
+            eventsListLayout.setAdapter(new EventViewAdapter(getContext(), param));
+        }
     }
 }

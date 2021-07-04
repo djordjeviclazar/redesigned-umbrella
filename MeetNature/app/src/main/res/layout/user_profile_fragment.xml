@@ -45,7 +45,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.61" />
 
-        <LinearLayout
+        <ListView
             android:id="@+id/badges_list_layout"
             android:layout_width="217dp"
             android:layout_height="177dp"
@@ -72,7 +72,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
+    <ListView
         android:id="@+id/events_list_layout"
         android:layout_width="393dp"
         android:layout_height="222dp"

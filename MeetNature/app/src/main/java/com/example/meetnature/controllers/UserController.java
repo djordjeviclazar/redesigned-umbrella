@@ -1,21 +1,15 @@
 package com.example.meetnature.controllers;
 
-import androidx.annotation.NonNull;
-
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.meetnature.helpers.*;
-import com.google.firebase.database.ValueEventListener;
 
 public class UserController {
 
@@ -69,28 +63,28 @@ public class UserController {
 
     public void addEvent(Event event, OnSuccessListener callback){
         SmallEvent smallEvent = new SmallEvent();
-        smallEvent.setId(event.getId());
+        smallEvent.setUId(event.getUId());
         smallEvent.setEventName(event.getEventName());
         smallEvent.setGeoHash(event.getGeoHash());
-        smallEvent.setImageUrl(event.getEventName());
+        smallEvent.setImageUrl(event.getImageUrl());
         smallEvent.setLat(event.getLat());
         smallEvent.setLon(event.getLon());
         smallEvent.setTime(event.getTime());
 
-        context.child(user.getUid()).child("organizingEvents").child(event.getId()).setValue(smallEvent).addOnSuccessListener(callback);
+        context.child(user.getUid()).child("organizingEvents").child(event.getUId()).setValue(smallEvent).addOnSuccessListener(callback);
     }
 
     public void followEvent(Event event, OnSuccessListener callback){
         SmallEvent smallEvent = new SmallEvent();
-        smallEvent.setId(event.getId());
+        smallEvent.setUId(event.getUId());
         smallEvent.setEventName(event.getEventName());
         smallEvent.setGeoHash(event.getGeoHash());
-        smallEvent.setImageUrl(event.getEventName());
+        smallEvent.setImageUrl(event.getImageUrl());
         smallEvent.setLat(event.getLat());
         smallEvent.setLon(event.getLon());
         smallEvent.setTime(event.getTime());
 
-        context.child(user.getUid()).child("followingEvents").child(event.getId()).setValue(smallEvent).addOnSuccessListener(callback);
+        context.child(user.getUid()).child("followingEvents").child(event.getUId()).setValue(smallEvent).addOnSuccessListener(callback);
     }
 
 }

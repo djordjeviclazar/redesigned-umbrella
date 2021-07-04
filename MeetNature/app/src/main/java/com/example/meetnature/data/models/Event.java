@@ -40,11 +40,11 @@ public class Event {
         this.geoHash = "";
     }
 
-    public String getId() {
+    public String getUId() {
         return uId;
     }
 
-    public void setId(String uId) {
+    public void setUId(String uId) {
         this.uId = uId;
     }
 

@@ -32,6 +32,8 @@ import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.home.ui.DatePickerViewModel;
 import com.example.meetnature.home.ui.date_picker_fragment;
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
@@ -52,7 +54,9 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddEventFragment extends Fragment {
 
@@ -107,6 +111,7 @@ public class AddEventFragment extends Fragment {
         EditText descTxb = (EditText)view.findViewById(R.id.add_event_description_tbx);
         EditText nameTxb = (EditText)view.findViewById(R.id.add_event_name_tbx);
         EditText tagTxb = (EditText)view.findViewById(R.id.add_event_tags_tbx);
+        EditText capacityTxb = (EditText)view.findViewById(R.id.add_event_fragment_capacity);
 
         dateTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -142,6 +147,9 @@ public class AddEventFragment extends Fragment {
                 event.setCapacity(20);
                 event.setFinished(false);
                 event.setImageUrl(UserController.getInstance().getCurrentUser().getUsername() + "_" + event.getEventName() + new Date().toString() + ".jpg");
+                event.setLon(mainActivity.getUser().getLon());
+                event.setLat(mainActivity.getUser().getLat());
+                event.setGeoHash(GeoFireUtils.getGeoHashForLocation(new GeoLocation(mainActivity.getUser().getLat(), mainActivity.getUser().getLon())));
 
 
                 ByteArrayOutputStream imgBytes = new ByteArrayOutputStream();
