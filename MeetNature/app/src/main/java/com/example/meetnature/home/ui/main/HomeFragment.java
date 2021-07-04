@@ -45,7 +45,6 @@ public class HomeFragment extends Fragment {
     private MyLocationNewOverlay myLocationNewOverlay;
 
     final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
-    final double latNis = 43.3209, lonNis = 21.8958;
 
     public static HomeFragment newInstance() {
         return new HomeFragment();
@@ -55,13 +54,15 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+
         // TODO: Use the ViewModel
     }
 

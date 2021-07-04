@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".home.ui.addevent.AddEventFragment">
-
+    <!--
     <org.osmdroid.views.MapView
         android:id="@+id/add_event_map"
         tilesource="Mapnik"
@@ -17,7 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.736" />
-
+    -->
     <ImageButton
         android:id="@+id/add_event_image_btn"
         android:layout_width="94dp"
@@ -71,7 +71,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.284" />
-
+    <!--
     <Button
         android:id="@+id/add_event_change_location_btn"
         android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.53" />
-
+    -->
     <Button
         android:id="@+id/add_event_add_btn"
         android:layout_width="313dp"
@@ -96,7 +96,7 @@
         app:layout_constraintVertical_bias="0.86" />
 
     <EditText
-        android:id="@+id/add_event_datetime_tbx"
+        android:id="@+id/add_event_datetime_txb"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"

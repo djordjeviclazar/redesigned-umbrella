@@ -72,21 +72,6 @@ public class UserProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.user_profile_fragment, container, false);
-
-        /*View usernameTextView = root.findViewById(R.id.username_lbl);
-        View infoTextView = root.findViewById(R.id.info_lbl);
-        View userProfileImage = root.findViewWithTag(R.id.user_profile_img);
-        View badgesListLayout = root.findViewById(R.id.badges_list_layout);
-        View eventsListLayout = root.findViewById(R.id.events_list_layout);
-
-        User user = ((MainActivity)getActivity()).getUser();
-
-
-
-        ((TextView) usernameTextView).setText(user.getUsername());
-        ((TextView) infoTextView).setText(user.getInfo());
-        //((ImageView) userProfileImage).(user.getImageUrl());
-        */
         return root;
     }
 

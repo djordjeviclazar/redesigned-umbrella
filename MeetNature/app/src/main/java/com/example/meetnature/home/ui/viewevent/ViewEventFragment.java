@@ -34,6 +34,7 @@ import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
@@ -93,6 +94,11 @@ public class ViewEventFragment extends Fragment {
                     mapController.setZoom(15.0);
                     GeoPoint startPoint = new GeoPoint(event.getLat(), event.getLon());
                     mapController.setCenter(startPoint);
+                    Marker marker = new Marker(mapView);
+                    marker.setPosition(startPoint);
+                    marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                    mapView.getOverlays().add(marker);
                 }
 
                 String taglist = "";
