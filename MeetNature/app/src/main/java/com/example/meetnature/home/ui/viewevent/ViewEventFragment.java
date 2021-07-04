@@ -106,11 +106,12 @@ public class ViewEventFragment extends Fragment {
                     taglist += tag;
                 }
                 ((TextView)view.findViewById(R.id.event_tags_lbl)).setText(taglist);
-                ((TextView)view.findViewById(R.id.event_place_lbl)).setText(event.getPlace());
-                ((TextView)view.findViewById(R.id.event_city_lbl)).setText(event.getCity());
+                //((TextView)view.findViewById(R.id.event_place_lbl)).setText(event.getPlace());
+                //((TextView)view.findViewById(R.id.event_city_lbl)).setText(event.getCity());
                 ((TextView)view.findViewById(R.id.event_date_lbl)).setText(event.getTime().toString());
                 ((TextView)view.findViewById(R.id.event_description_lbl)).setText(event.getDescription());
-                ((TextView)view.findViewById(R.id.event_country_lbl)).setText(event.getCountry());
+                //((TextView)view.findViewById(R.id.event_country_lbl)).setText(event.getCountry());
+                ((TextView)view.findViewById(R.id.event_capacity_lbl)).setText(event.getCapacity());
                 ((TextView)view.findViewById(R.id.event_name_lbl)).setText(event.getEventName());
                 ((TextView)view.findViewById(R.id.event_owner_lbl)).setText(event.getOrganizer().getUsername());
 
