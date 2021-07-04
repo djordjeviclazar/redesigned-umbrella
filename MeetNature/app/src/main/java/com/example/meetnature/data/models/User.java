@@ -3,6 +3,7 @@ package com.example.meetnature.data.models;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class User implements Serializable {
 
@@ -13,12 +14,12 @@ public class User implements Serializable {
     private String imageUrl;
     private int phoneNumber;
     private int score;
-    private List<Badges> badges;
-    private List<SmallEvent> organizingEvents;
-    private List<SmallEvent> followingEvents;
-    private List<SmallUser> friends;
-    private List<SmallUser> following;
-    private List<SmallUser> followers;
+    private Map<String, Badges> badges;
+    private Map<String, SmallEvent> organizingEvents;
+    private Map<String, SmallEvent> followingEvents;
+    private Map<String, SmallUser> friends;
+    private Map<String, SmallUser> following;
+    private Map<String, SmallUser> followers;
     private double lat;
     private double lon;
     private String geoHash;
@@ -31,11 +32,6 @@ public class User implements Serializable {
         this.imageUrl = "";
         this.score = 0;
         this.phoneNumber = 0;
-        this.badges = Collections.emptyList();
-        this.followingEvents = Collections.emptyList();
-        this.friends = Collections.emptyList();
-        this.following = Collections.emptyList();
-        this.followers = Collections.emptyList();
         this.lat = 0;
         this.lon = 0;
 
@@ -94,51 +90,51 @@ public class User implements Serializable {
         this.score = score;
     }
 
-    public List<Badges> getBadges() {
+    public Map<String, Badges> getBadges() {
         return badges;
     }
 
-    public void setBadges(List<Badges> badges) {
+    public void setBadges(Map<String, Badges> badges) {
         this.badges = badges;
     }
 
-    public List<SmallEvent> getOrganizingEvents() {
+    public Map<String, SmallEvent> getOrganizingEvents() {
         return organizingEvents;
     }
 
-    public void setOrganizingEvents(List<SmallEvent> followingEvents) {
+    public void setOrganizingEvents(Map<String, SmallEvent> followingEvents) {
         this.organizingEvents = followingEvents;
     }
 
-    public List<SmallEvent> getFollowingEvents() {
+    public Map<String, SmallEvent> getFollowingEvents() {
         return followingEvents;
     }
 
-    public void setFollowingEvents(List<SmallEvent> followingEvents) {
+    public void setFollowingEvents(Map<String, SmallEvent> followingEvents) {
         this.followingEvents = followingEvents;
     }
 
-    public List<SmallUser> getFriends() {
+    public Map<String, SmallUser> getFriends() {
         return friends;
     }
 
-    public void setFriends(List<SmallUser> friends) {
+    public void setFriends(Map<String, SmallUser> friends) {
         this.friends = friends;
     }
 
-    public List<SmallUser> getFollowing() {
+    public Map<String, SmallUser> getFollowing() {
         return following;
     }
 
-    public void setFollowing(List<SmallUser> following) {
+    public void setFollowing(Map<String, SmallUser> following) {
         this.following = following;
     }
 
-    public List<SmallUser> getFollowers() {
+    public Map<String, SmallUser> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<SmallUser> followers) {
+    public void setFollowers(Map<String, SmallUser> followers) {
         this.followers = followers;
     }
 

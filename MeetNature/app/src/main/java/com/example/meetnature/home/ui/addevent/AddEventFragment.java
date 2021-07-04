@@ -142,8 +142,8 @@ public class AddEventFragment extends Fragment {
                 event.setTime(datePickerViewModel.date);
                 event.setEventName(nameTxb.getText().toString());
                 List<String> tags = new ArrayList<>();
-                tags.add(tagTxb.getText().toString());
-                event.setTag(tags);
+                //tags.add(tagTxb.getText().toString());
+                event.setTag(tagTxb.getText().toString());
                 event.setCapacity(20);
                 event.setFinished(false);
                 event.setImageUrl(UserController.getInstance().getCurrentUser().getUsername() + "_" + event.getEventName() + new Date().toString() + ".jpg");

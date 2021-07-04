@@ -22,6 +22,7 @@ import com.squareup.picasso.Picasso;
 import com.example.meetnature.helpers.taksiDoBaze;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -105,7 +106,7 @@ public class UserProfileFragment extends Fragment {
 
         // Print events:
         if (user.getOrganizingEvents() != null) {
-            List<SmallEvent> smallEvents = user.getOrganizingEvents();
+            Collection<SmallEvent> smallEvents = user.getOrganizingEvents().values();
 
             ArrayList<SmallEvent> param = new ArrayList<>();
             param.addAll(smallEvents);

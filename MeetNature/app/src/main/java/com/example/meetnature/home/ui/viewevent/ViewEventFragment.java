@@ -102,9 +102,11 @@ public class ViewEventFragment extends Fragment {
                 }
 
                 String taglist = "";
+                /*
                 for (String tag : event.getTag()){
                     taglist += tag;
-                }
+                }*/
+                taglist += event.getTag();
                 ((TextView)view.findViewById(R.id.event_tags_lbl)).setText(taglist);
                 //((TextView)view.findViewById(R.id.event_place_lbl)).setText(event.getPlace());
                 //((TextView)view.findViewById(R.id.event_city_lbl)).setText(event.getCity());

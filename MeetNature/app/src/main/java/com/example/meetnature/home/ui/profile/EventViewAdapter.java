@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
@@ -40,8 +41,10 @@ public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
         }
 
         SmallEvent smallEvent = eventList.get(position);
-        ImageButton img= (ImageButton)item.findViewById(R.id.simple_event_list_item_image);
+        ImageButton img = (ImageButton)item.findViewById(R.id.simple_event_list_item_image);
         Picasso.get().load(smallEvent.getImageUrl()).resize(100, 100).into(img);
+
+        ((TextView)item.findViewById(R.id.simple_event_list_item_event_name_lbl)).setText(smallEvent.getEventName());
 
         return item;
     }
