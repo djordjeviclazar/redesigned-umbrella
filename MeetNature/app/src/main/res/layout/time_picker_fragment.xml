@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/land5346046"
     tools:context=".home.ui.time_picker_fragment">
 
     <TimePicker
@@ -12,6 +13,7 @@
         android:layout_width="390dp"
 
         android:layout_height="442dp"
+        android:background="#5BFFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
