@@ -39,7 +39,7 @@ public class EventController {
     private static EventController instance = null;
 
     private EventController(){
-        UserController.getInstance();
+        userController = UserController.getInstance();
         user = UserController.getInstance().getCurrentUser();
         context = FirebaseDatabase.getInstance(taksiDoBaze.dbURL).getReference().child("Event");
     }
@@ -55,8 +55,15 @@ public class EventController {
     public void addEvent(Event event, OnSuccessListener callback){
         String uid = context.push().getKey();
         event.setId(uid);
+        SmallUser organizer = new SmallUser();
+        User currentUser = userController.getCurrentUser();
+        organizer.setImageUrl(currentUser.getImageUrl());
+        organizer.setUid(currentUser.getUid());
+        organizer.setUsername(currentUser.getUsername());
+        event.setOrganizer(organizer);
 
         userController.addEvent(event, new SmallEventAddedCallback(uid, event, callback));
+
     }
 
     public void getEvent(String uid, OnSuccessListener<DataSnapshot> callback){
@@ -72,13 +79,13 @@ public class EventController {
         UserController.getInstance().followEvent(event, callback);
     }
 
-    public void getNearEvents(String currentGeoHash, double currentLat, double currentLon, OnSuccessListener<DataSnapshot> callback){
+    public void getNearEvents(String currentGeoHash, double currentLat, double currentLon, ChildEventListener callback){
         List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(new GeoLocation(currentLat, currentLon), 50);
         List<Task<DataSnapshot>> queries = new ArrayList<>();
         for(GeoQueryBounds bound : bounds){
-            Query query = context.orderByChild("geoHash").startAt(bound.startHash).endAt(bound.endHash);
+            context.orderByChild("geoHash").startAt(bound.startHash).endAt(bound.endHash).addChildEventListener(callback);
             //queries.add(query.get());
-            query.get().addOnSuccessListener(callback);
+            //query.get().addOnSuccessListener(callback);
         }
 /*
         Tasks.whenAllSuccess(queries).addOnSuccessListener(new OnSuccessListener<List<Object>>() {
@@ -108,6 +115,7 @@ public class EventController {
 
         @Override
         public void onSuccess(Object o) {
+
             context.child(uid).setValue(event).addOnSuccessListener(callback);
         }
     }

@@ -73,7 +73,7 @@ public class LoginFragment extends Fragment {
                 loginUser.email = ((TextView) view.findViewById(R.id.firstpage_loginfragment_email_txb)).getText().toString();
                 loginUser.password = ((TextView) view.findViewById(R.id.firstpage_loginfragment_pass_txb)).getText().toString();
 
-                ((MainActivity) getActivity()).setLogedUserCallback(new LoginFragmentLogedUserCallback());
+                //((MainActivity) getActivity()).setLogedUserCallback(new LoginFragmentLogedUserCallback());
                 authenticationViewModel.loginUser(loginUser);
             }
         });

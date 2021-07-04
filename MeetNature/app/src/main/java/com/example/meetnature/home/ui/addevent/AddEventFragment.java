@@ -1,12 +1,14 @@
 package com.example.meetnature.home.ui.addevent;
 
 import androidx.core.app.ActivityCompat;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -18,14 +20,22 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
+import com.example.meetnature.controllers.EventController;
+import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.home.ui.DatePickerViewModel;
 import com.example.meetnature.home.ui.date_picker_fragment;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.views.MapController;
@@ -36,7 +46,13 @@ import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
+import com.example.meetnature.helpers.taksiDoBaze;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 public class AddEventFragment extends Fragment {
 
@@ -47,6 +63,7 @@ public class AddEventFragment extends Fragment {
     private MapView mapView;
     private IMapController mapController;
     private MyLocationNewOverlay myLocationNewOverlay;
+    private StorageReference imageStorage;
 
     private final static int TAKE_PICTURE = 1;
     private final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
@@ -60,7 +77,8 @@ public class AddEventFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
 
         mViewModel = new ViewModelProvider(this).get(AddEventViewModel.class);
-        datePickerViewModel = new ViewModelProvider(this).get(DatePickerViewModel.class);
+        datePickerViewModel = DatePickerViewModel.getInstance();
+        imageStorage = FirebaseStorage.getInstance(taksiDoBaze.dbStorage).getReference();
 
         return inflater.inflate(R.layout.add_event_fragment, container, false);
     }
@@ -76,20 +94,29 @@ public class AddEventFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        TextView dateTime = (TextView) view.findViewById(R.id.add_event_datetime_txb);
+        EditText dateTime = (EditText) view.findViewById(R.id.add_event_datetime_txb);
         eventImage = (ImageButton) view.findViewById(R.id.add_event_image_btn);
         mainActivity = (MainActivity)getActivity();
-
-
-        dateTime.setOnClickListener(new View.OnClickListener() {
+        datePickerViewModel.mutableLiveData.observe(getActivity(), new Observer<String>() {
             @Override
-            public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, date_picker_fragment.class, null)
-                        .setReorderingAllowed(true)
-                        .addToBackStack(null)
-                        .commit();
+            public void onChanged(String s) {
+                dateTime.setText(s, TextView.BufferType.EDITABLE);
+            }
+        });
 
-                dateTime.setText(datePickerViewModel.date.toString());
+        EditText descTxb = (EditText)view.findViewById(R.id.add_event_description_tbx);
+        EditText nameTxb = (EditText)view.findViewById(R.id.add_event_name_tbx);
+        EditText tagTxb = (EditText)view.findViewById(R.id.add_event_tags_tbx);
+
+        dateTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(final View v, final boolean hasFocus) {
+                if(hasFocus) {
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, date_picker_fragment.class, null)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
+                }
             }
         });
 
@@ -105,7 +132,46 @@ public class AddEventFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Event event = new Event();
+                event.setDescription(descTxb.getText().toString());
+                Date eventDate = datePickerViewModel.date == null ? new Date() : datePickerViewModel.date;
+                event.setTime(datePickerViewModel.date);
+                event.setEventName(nameTxb.getText().toString());
+                List<String> tags = new ArrayList<>();
+                tags.add(tagTxb.getText().toString());
+                event.setTag(tags);
+                event.setCapacity(20);
+                event.setFinished(false);
+                event.setImageUrl(UserController.getInstance().getCurrentUser().getUsername() + "_" + event.getEventName() + new Date().toString() + ".jpg");
 
+
+                ByteArrayOutputStream imgBytes = new ByteArrayOutputStream();
+                ((BitmapDrawable)eventImage.getDrawable()).getBitmap().compress(Bitmap.CompressFormat.JPEG, 85, imgBytes);
+                imageStorage.child(event.getImageUrl()).putBytes(imgBytes.toByteArray())
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(mainActivity, "Image upload failed", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            EventController.getInstance().addEvent(event, new OnSuccessListener() {
+                                @Override
+                                public void onSuccess(Object o) {
+                                    Toast.makeText(mainActivity, "Event is added", Toast.LENGTH_SHORT).show();
+                                    //TODO: redirect to event page
+                                }
+                            });
+                        }
+                    });
+
+                EventController.getInstance().addEvent(event, new OnSuccessListener() {
+                    @Override
+                    public void onSuccess(Object o) {
+                        Toast.makeText(getActivity(),"Event is created", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
         });
         /*

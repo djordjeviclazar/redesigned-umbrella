@@ -50,7 +50,7 @@ public class date_picker_fragment extends Fragment {
         super.onCreate(savedInstanceState);
 
 
-        mViewModel = new ViewModelProvider(this).get(DatePickerViewModel.class);
+        mViewModel = DatePickerViewModel.getInstance();
     }
 
     @Override
@@ -68,8 +68,9 @@ public class date_picker_fragment extends Fragment {
         view.findViewById(R.id.date_picker_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mViewModel.date.setYear(datePicker.getYear());
-                mViewModel.date.setMonth(datePicker.getMonth());
+                mViewModel.date = new Date();
+                mViewModel.date.setYear(datePicker.getYear() - 1900);
+                mViewModel.date.setMonth(datePicker.getMonth() - 1);
                 mViewModel.date.setDate(datePicker.getDayOfMonth());
 
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.main_fragment_container, time_picker_fragment.class, null)

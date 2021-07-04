@@ -38,7 +38,7 @@ public class time_picker_fragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mViewModel = new ViewModelProvider(this).get(DatePickerViewModel.class);
+        mViewModel = DatePickerViewModel.getInstance();
     }
 
     @Override
@@ -59,6 +59,7 @@ public class time_picker_fragment extends Fragment {
             public void onClick(View v) {
                 mViewModel.date.setHours(timePicker.getHour());
                 mViewModel.date.setMinutes(timePicker.getMinute());
+                mViewModel.mutableLiveData.postValue(mViewModel.date.toString());
 
                 getActivity().getSupportFragmentManager().popBackStack();
                 getActivity().getSupportFragmentManager().popBackStack();
