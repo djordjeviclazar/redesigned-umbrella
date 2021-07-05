@@ -19,12 +19,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.example.meetnature.R;
+import com.example.meetnature.data.models.User;
 import com.squareup.picasso.Picasso;
 
 public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
 
     private Context mainContext;
     private List<SmallEvent> eventList = new ArrayList<>();
+    private UserProfileFragment.OnClickListenerLinkEvent onClickListenerLinkEvent;
 
     public EventViewAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallEvent> list) {
         super(context, 0 , list);
@@ -45,7 +47,15 @@ public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
         Picasso.get().load(smallEvent.getImageUrl()).resize(100, 100).into(img);
 
         ((TextView)item.findViewById(R.id.simple_event_list_item_event_name_lbl)).setText(smallEvent.getEventName());
+        ((TextView)item.findViewById(R.id.simple_event_list_item_tag_lbl)).setText(smallEvent.getTag());
+
+        onClickListenerLinkEvent.setEventUid(smallEvent.getUId());
+        item.findViewById(R.id.simple_event_list_item_link_btn).setOnClickListener(onClickListenerLinkEvent);
 
         return item;
+    }
+
+    public void setOnClickListenerLinkEvent(UserProfileFragment.OnClickListenerLinkEvent onClickListenerLinkEvent) {
+        this.onClickListenerLinkEvent = onClickListenerLinkEvent;
     }
 }

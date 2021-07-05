@@ -17,6 +17,7 @@ import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
+import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
 
 import com.example.meetnature.helpers.taksiDoBaze;
@@ -32,44 +33,23 @@ import java.util.List;
  */
 public class UserProfileFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    MainActivity mainActivity;
 
     public UserProfileFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment UserProfileFragment.
-     */
     // TODO: Rename and change types and number of parameters
     public static UserProfileFragment newInstance(String param1, String param2) {
         UserProfileFragment fragment = new UserProfileFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
+        mainActivity = (MainActivity)getActivity();
     }
 
     @Override
@@ -91,7 +71,7 @@ public class UserProfileFragment extends Fragment {
         ListView badgesListLayout = view.findViewById(R.id.badges_list_layout);
         ListView eventsListLayout = view.findViewById(R.id.events_list_layout);
 
-        User user = ((MainActivity)getActivity()).getUser();
+        User user = mainActivity.getUser();
         if (user.getImageUrl().equals("")){
             Picasso.get().load(taksiDoBaze.defaultImage).resize(200, 200).into((ImageView)userProfileImage);
         }
@@ -110,7 +90,26 @@ public class UserProfileFragment extends Fragment {
 
             ArrayList<SmallEvent> param = new ArrayList<>();
             param.addAll(smallEvents);
-            eventsListLayout.setAdapter(new EventViewAdapter(getContext(), param));
+            EventViewAdapter adapter = new EventViewAdapter(getContext(), param);
+            adapter.setOnClickListenerLinkEvent(new OnClickListenerLinkEvent());
+            eventsListLayout.setAdapter(adapter);
+        }
+    }
+
+    public class OnClickListenerLinkEvent implements View.OnClickListener{
+
+        private String eventUid;
+
+        public void setEventUid(String eventUid) {
+            this.eventUid = eventUid;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Bundle bundle = new Bundle();
+            bundle.putString("eventUid", eventUid);
+            mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, ViewEventFragment.class, bundle)
+                    .setReorderingAllowed(true).addToBackStack(null).commit();
         }
     }
 }

@@ -154,4 +154,11 @@ public class User implements Serializable {
         this.lon = lon;
     }
 
+    public String getGeoHash(){
+        return geoHash;
+    }
+
+    public void setGeoHash(String geoHash) {
+        this.geoHash = geoHash;
+    }
 }

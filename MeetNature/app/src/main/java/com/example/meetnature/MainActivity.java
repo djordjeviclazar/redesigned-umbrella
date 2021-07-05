@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     AuthenticationViewModel authenticationViewModel;
     User user;
+    double userLat, userLon;
+    String userGeohash;
     FragmentManager mainFragmentManager;
     LocationManager locationManager;
 
@@ -51,7 +53,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 10, this);
+        }
+        else{
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 100, 10, this);
         }
 
 
@@ -87,11 +92,15 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        if (user != null){
-            user.setLat(location.getLatitude());
-            user.setLon(location.getLongitude());
-            GeoFireUtils.getGeoHashForLocation(new GeoLocation(user.getLat(), user.getLon()));
-        }
+            userLat = location.getLatitude();
+            userLon = location.getLongitude();
+            userGeohash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(userLat, userLon));
+
+            if (user != null){
+                user.setLon(userLon);
+                user.setLat(userLat);
+                user.setGeoHash(userGeohash);
+            }
     }
 
     public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
@@ -99,6 +108,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         @Override
         public void onSuccess(DataSnapshot dataSnapshot) {
              MainActivity.this.user = dataSnapshot.getValue(User.class);
+             user.setLon(userLon);
+             user.setLat(userLat);
+             user.setGeoHash(userGeohash);
 
             if(user == null){
                 Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();

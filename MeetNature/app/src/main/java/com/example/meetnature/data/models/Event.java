@@ -16,6 +16,7 @@ public class Event {
     private String imageUrl;
     private Date time;
     private boolean finished;
+    private boolean started;
     private String tag;
     private int capacity;
     private int followersCount;
@@ -108,6 +109,14 @@ public class Event {
 
     public void setFinished(boolean finished) {
         this.finished = finished;
+    }
+
+    public boolean getStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
     }
 
     public String getTag() {

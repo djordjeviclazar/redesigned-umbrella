@@ -66,6 +66,15 @@ public class EventController {
         UserController.getInstance().followEvent(event, callback);
     }
 
+    public void attendEvent(Event event, User user, OnSuccessListener callback){
+        SmallUser smallUser = new SmallUser();
+        smallUser.setUid(user.getUid());
+        smallUser.setUsername(user.getUsername());
+        smallUser.setImageUrl(user.getImageUrl());
+        context.child(event.getUId()).child("attendants").setValue(smallUser);
+        UserController.getInstance().followEvent(event, callback);
+    }
+
     public void getNearEvents(String currentGeoHash, double currentLat, double currentLon, ChildEventListener callback){
         List<GeoQueryBounds> bounds = GeoFireUtils.getGeoHashQueryBounds(new GeoLocation(currentLat, currentLon), 50);
         List<Task<DataSnapshot>> queries = new ArrayList<>();
