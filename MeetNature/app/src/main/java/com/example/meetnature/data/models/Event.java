@@ -3,6 +3,7 @@ package com.example.meetnature.data.models;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class Event {
 
@@ -15,11 +16,12 @@ public class Event {
     private String imageUrl;
     private Date time;
     private boolean finished;
-    private List<String> tag;
+    private boolean started;
+    private String tag;
     private int capacity;
     private int followersCount;
-    private List<SmallUser> attendants;
-    private List<SmallUser> followers;
+    private Map<String, SmallUser> attendants;
+    private Map<String, SmallUser> followers;
     private SmallUser organizer;
     private double lat;
     private double lon;
@@ -30,10 +32,7 @@ public class Event {
         this.description = "";
         this.imageUrl = "";
         this.time = null;
-        this.tag = Collections.emptyList();
         this.capacity = 0;
-        this.attendants = Collections.emptyList();
-        this.followers = Collections.emptyList();
         this.organizer = new SmallUser();
         this.lat = 0;
         this.lon = 0;
@@ -112,11 +111,19 @@ public class Event {
         this.finished = finished;
     }
 
-    public List<String> getTag() {
+    public boolean getStarted() {
+        return started;
+    }
+
+    public void setStarted(boolean started) {
+        this.started = started;
+    }
+
+    public String getTag() {
         return tag;
     }
 
-    public void setTag(List<String> tag) {
+    public void setTag(String tag) {
         this.tag = tag;
     }
 
@@ -136,19 +143,19 @@ public class Event {
         this.followersCount = followersCount;
     }
 
-    public List<SmallUser> getAttendants() {
+    public Map<String, SmallUser> getAttendants() {
         return attendants;
     }
 
-    public void setAttendants(List<SmallUser> attendants) {
+    public void setAttendants(Map<String, SmallUser> attendants) {
         this.attendants = attendants;
     }
 
-    public List<SmallUser> getFollowers() {
+    public Map<String, SmallUser> getFollowers() {
         return followers;
     }
 
-    public void setFollowers(List<SmallUser> followers) {
+    public void setFollowers(Map<String, SmallUser> followers) {
         this.followers = followers;
     }
 

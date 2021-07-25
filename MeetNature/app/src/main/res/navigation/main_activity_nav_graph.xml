@@ -67,5 +67,14 @@
         android:name="com.example.meetnature.home.ui.profile.UserProfileFragment"
         android:label="User Profile Fragment"
         tools:layout="@layout/user_profile_fragment">
+        <action
+            android:id="@+id/action_UserProfileFragment_to_ViewEventFragment"
+            app:destination="@+id/user_profile_fragment" />
     </fragment>
+
+    <fragment
+        android:id="@+id/view_event_fragment"
+        android:label="View Event Fragment"
+        android:name="com.example.meetnature.home.ui.viewevent.ViewEventFragment"
+        tools:layout="@layout/view_event_fragment"></fragment>
 </navigation>

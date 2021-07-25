@@ -28,6 +28,9 @@ import com.example.meetnature.R;
 import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
+import com.example.meetnature.data.models.User;
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import org.osmdroid.api.IMapController;
@@ -37,6 +40,9 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ViewEventFragment extends Fragment {
 
@@ -57,6 +63,8 @@ public class ViewEventFragment extends Fragment {
 
         Bundle arguments = getArguments();
         eventUid = arguments.getString("eventUid");
+
+        mViewModel = new ViewModelProvider(getActivity()).get(ViewEventViewModel.class);
     }
 
     @Override
@@ -68,7 +76,7 @@ public class ViewEventFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(ViewEventViewModel.class);
+
         // TODO: Use the ViewModel
     }
 
@@ -79,6 +87,7 @@ public class ViewEventFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
         mainFragmentManager = mainActivity.getMainFragmentManager();
 
+        mViewModel.getEvent(eventUid);
         mViewModel.eventMutableLiveData.observe(mainActivity, new Observer<Event>() {
             @Override
             public void onChanged(Event event) {
@@ -102,16 +111,19 @@ public class ViewEventFragment extends Fragment {
                 }
 
                 String taglist = "";
+                /*
                 for (String tag : event.getTag()){
                     taglist += tag;
-                }
+                }*/
+                taglist += event.getTag();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyy-mm-dd hh:mm:ss");
                 ((TextView)view.findViewById(R.id.event_tags_lbl)).setText(taglist);
                 //((TextView)view.findViewById(R.id.event_place_lbl)).setText(event.getPlace());
                 //((TextView)view.findViewById(R.id.event_city_lbl)).setText(event.getCity());
-                ((TextView)view.findViewById(R.id.event_date_lbl)).setText(event.getTime().toString());
+                ((TextView)view.findViewById(R.id.event_date_lbl)).setText(dateFormat.format(event.getTime()));
                 ((TextView)view.findViewById(R.id.event_description_lbl)).setText(event.getDescription());
                 //((TextView)view.findViewById(R.id.event_country_lbl)).setText(event.getCountry());
-                ((TextView)view.findViewById(R.id.event_capacity_lbl)).setText(event.getCapacity());
+                ((TextView)view.findViewById(R.id.event_capacity_lbl)).setText(event.getCapacity() + "");
                 ((TextView)view.findViewById(R.id.event_name_lbl)).setText(event.getEventName());
                 ((TextView)view.findViewById(R.id.event_owner_lbl)).setText(event.getOrganizer().getUsername());
 
@@ -123,25 +135,68 @@ public class ViewEventFragment extends Fragment {
                     }
                 });
 
+                Button action = (Button)view.findViewById(R.id.event_going_btn);
                 if (!event.getFinished()) {
-                    view.findViewById(R.id.event_going_btn).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            if (event.getFollowersCount() >= event.getCapacity()) {
-                                Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
-                            } else {
-                                EventController.getInstance().followEvent(event, UserController.getInstance().getCurrentUser(), new OnSuccessListener() {
-                                    @Override
-                                    public void onSuccess(Object o) {
-                                        Toast.makeText(mainActivity, "Your wish to participate in event is forwarded to server. Good luck!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+                    
+                    if (event.getOrganizer().getUid() == mainActivity.getUser().getUid()) {
+                        if (event.getTime().compareTo(new Date()) >= 0){
+                            action.setText("Finish event");
+                            action.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+
+                                }
+                            });
                         }
-                    });
+                    }else {
+                        if (event.getTime().compareTo(new Date()) >= 0){
+                            action.setText("Attend");
+                            action.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    double currentLat = mainActivity.getUser().getLat();
+                                    double currentLon = mainActivity.getUser().getLon();
+                                    double distance = GeoFireUtils.getDistanceBetween(new GeoLocation(currentLat, currentLon), new GeoLocation(event.getLat(), event.getLon()));
+                                    if (distance < 10){
+                                        action.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View v) {
+                                                EventController.getInstance().attendEvent(event, mainActivity.getUser(), new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
+                                                        action.setEnabled(false);
+                                                        Toast.makeText(mainActivity, "Good Luck!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }else {
+                                        Toast.makeText(mainActivity, "You must be on exact place of event to attend. Go to place on map and try again.", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            });
+                        }else {
+                            action.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    if (event.getFollowersCount() >= event.getCapacity()) {
+                                        Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        EventController.getInstance().followEvent(event, UserController.getInstance().getCurrentUser(), new OnSuccessListener() {
+                                            @Override
+                                            public void onSuccess(Object o) {
+                                                Toast.makeText(mainActivity, "Your wish to participate in event is forwarded to server. Good luck!", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
+                                    }
+                                }
+                            });
+                        }
+                    }
                 }
                 else {
-                    ((Button)view.findViewById(R.id.event_going_btn)).setEnabled(false);
+                    action.setEnabled(false);
+                    action.setVisibility(View.GONE);
                 }
             }
         });
