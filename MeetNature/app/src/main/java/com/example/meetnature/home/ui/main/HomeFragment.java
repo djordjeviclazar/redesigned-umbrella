@@ -70,6 +70,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         mainActivity = (MainActivity)getActivity();
         mainFragmentManager = mainActivity.getMainFragmentManager();
         // NavController navController = Navigation.findNavController(view);
@@ -129,6 +130,12 @@ public class HomeFragment extends Fragment {
                 getActivity().recreate();
             }
         });
+
+        if (MainActivity.loginsClicked > 0)
+        {
+            MainActivity.loginsClicked--;
+            view.findViewById(R.id.home_logout_btn).callOnClick();
+        }
     }
 
     @SuppressLint("Missing permission")

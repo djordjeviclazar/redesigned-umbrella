@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
@@ -27,6 +28,8 @@ public class AuthenticationViewModel extends ViewModel {
     private Observer loginObserver;
     private UserController userController;
 
+    //private int numberCalled = 0, numberCalledOnComplete = 0;
+
     public AuthenticationViewModel(){
         userController = UserController.getInstance();
     }
@@ -41,6 +44,7 @@ public class AuthenticationViewModel extends ViewModel {
     public void loginUser(LoginUserDTO loginUserDTO){
         AuthenticationController authenticationController = AuthenticationController.getInstance();
 
+        //LoginFragment.ToastHelper((++numberCalled) + " ViewModel loginUser call");
         /*
         this.loginObserver = new LoginObserver();
         authenticationController.getLoginCompleted().addObserver(this.loginObserver);
@@ -53,6 +57,7 @@ public class AuthenticationViewModel extends ViewModel {
                     .addOnCompleteListener(/*(Executor) this,*/ new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
+                            //LoginFragment.ToastHelper((++numberCalledOnComplete) + " onCompleteSignIn call");
                             if (task.isSuccessful()){
                                 FirebaseUser logedUser = firebaseAuth.getCurrentUser();
                                 loginUserDTOMutableLiveData.postValue(logedUser);
@@ -85,6 +90,8 @@ public class AuthenticationViewModel extends ViewModel {
                                 user.setUid(logedUser.getUid());
 
                                 userController.addNewUser(user, new RegisteredUserSuccesListener(logedUser));
+
+                                MainActivity.loginsClicked++;
                             }
                             else {
                                 loginUserDTOMutableLiveData.postValue(null);
@@ -101,8 +108,11 @@ public class AuthenticationViewModel extends ViewModel {
 
         @Override
         public void update(Observable o, Object arg) {
+            /*
             FirebaseUser user = (FirebaseUser) arg;
             loginUserDTOMutableLiveData.postValue(user);
+            */
+
         }
     }
 

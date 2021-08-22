@@ -47,10 +47,11 @@ public class AuthenticationController implements Executor {
         this.user = user;
     }
 
-    public void Login(String email, String pass){
+    /*public void Login(String email, String pass){
+        //LoginFragment.ToastHelper();
         try {
             firebaseAuth.signInWithEmailAndPassword(email, pass)
-                    .addOnCompleteListener(/*(Executor) this,*/ new OnCompleteListener<AuthResult>() {
+                    .addOnCompleteListener(*//*(Executor) this,*//* new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()){
@@ -94,7 +95,7 @@ public class AuthenticationController implements Executor {
         catch (Exception e) {
             return null;
         }
-    }
+    }*/
 
     public boolean logout(){
         firebaseAuth.signOut();

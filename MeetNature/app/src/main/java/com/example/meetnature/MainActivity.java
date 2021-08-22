@@ -20,6 +20,7 @@ import android.widget.Toolbar;
 
 import com.example.meetnature.authentication.AuthenticationViewModel;
 import com.example.meetnature.controllers.UserController;
+import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.home.ui.main.HomeFragment;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
@@ -30,7 +31,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements LocationListener {
+
+    public static int loginsClicked = 0;
 
     AuthenticationViewModel authenticationViewModel;
     User user;
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     FragmentManager mainFragmentManager;
     LocationManager locationManager;
 
+    //List<Event> nearEvents;
 
     private LogedUserCallback logedUserCallback;
 

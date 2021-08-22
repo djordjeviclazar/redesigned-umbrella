@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
@@ -27,6 +28,8 @@ import com.example.meetnature.authentication.data.dtos.LoginUserDTO;
  * create an instance of this fragment.
  */
 public class LoginFragment extends Fragment {
+
+    private static MainActivity mainActivity;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -57,6 +60,8 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        mainActivity = (MainActivity) getActivity();
+
         AuthenticationViewModel authenticationViewModel = ((MainActivity)getActivity()).getAuthViewModel();
         view.findViewById(R.id.RegisterTextLink).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,6 +82,11 @@ public class LoginFragment extends Fragment {
                 authenticationViewModel.loginUser(loginUser);
             }
         });
+    }
+
+    public static void ToastHelper(String text)
+    {
+        Toast.makeText(mainActivity, text, Toast.LENGTH_SHORT).show();
     }
 
     public class LoginFragmentLogedUserCallback implements MainActivity.LogedUserCallback{
