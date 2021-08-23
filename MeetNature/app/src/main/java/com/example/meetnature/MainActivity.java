@@ -1,9 +1,11 @@
 package com.example.meetnature;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -19,6 +21,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.meetnature.authentication.AuthenticationViewModel;
+import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.User;
@@ -26,11 +29,15 @@ import com.example.meetnature.home.ui.main.HomeFragment;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.geofire.core.GeoHash;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
@@ -44,7 +51,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     FragmentManager mainFragmentManager;
     LocationManager locationManager;
 
-    //List<Event> nearEvents;
+    MutableLiveData<Event> nearEvents;
+    HashMap<String, Event> inMemoryEvents;
 
     private LogedUserCallback logedUserCallback;
 
@@ -98,15 +106,44 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-            userLat = location.getLatitude();
-            userLon = location.getLongitude();
-            userGeohash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(userLat, userLon));
+        Toast.makeText(this, "onLocationChanged Invoked", Toast.LENGTH_SHORT).show();
 
-            if (user != null){
-                user.setLon(userLon);
-                user.setLat(userLat);
-                user.setGeoHash(userGeohash);
-            }
+        userLat = location.getLatitude();
+        userLon = location.getLongitude();
+        userGeohash = GeoFireUtils.getGeoHashForLocation(new GeoLocation(userLat, userLon));
+
+        if (user != null){
+            user.setLon(userLon);
+            user.setLat(userLat);
+            user.setGeoHash(userGeohash);
+
+            EventController.getInstance().getNearEvents(userGeohash, userLat, userLon, new GeoQueryEventListener() {
+                @Override
+                public void onKeyEntered(String key, GeoLocation location) {
+
+                }
+
+                @Override
+                public void onKeyExited(String key) {
+
+                }
+
+                @Override
+                public void onKeyMoved(String key, GeoLocation location) {
+
+                }
+
+                @Override
+                public void onGeoQueryReady() {
+
+                }
+
+                @Override
+                public void onGeoQueryError(DatabaseError error) {
+
+                }
+            });
+        }
     }
 
     public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
