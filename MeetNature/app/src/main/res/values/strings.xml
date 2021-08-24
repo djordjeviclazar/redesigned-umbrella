@@ -23,6 +23,7 @@
     <string name="event_tags">Tags: </string>
     <string name="edit_profile">Edit profile</string>
     <string name="event_going">Going</string>
+    <string name="event_start">Start</string>
 
     <!-- Titles -->
     <string name="app_title">"Meet &amp; Nature"</string>
