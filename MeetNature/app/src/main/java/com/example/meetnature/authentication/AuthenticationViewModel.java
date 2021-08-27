@@ -61,6 +61,7 @@ public class AuthenticationViewModel extends ViewModel {
                             if (task.isSuccessful()){
                                 FirebaseUser logedUser = firebaseAuth.getCurrentUser();
                                 loginUserDTOMutableLiveData.postValue(logedUser);
+                                MainActivity.loginsClicked++;
                             }
                             else {
                                 loginUserDTOMutableLiveData.postValue(null);

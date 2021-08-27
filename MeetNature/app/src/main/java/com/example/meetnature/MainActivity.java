@@ -42,7 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements LocationListener {
 
-    public static int loginsClicked = 0;
+    public static int loginsClicked = -10;
 
     AuthenticationViewModel authenticationViewModel;
     User user;
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     FragmentManager mainFragmentManager;
     LocationManager locationManager;
 
-    MutableLiveData<Event> nearEvents;
+    public static MutableLiveData<Event> nearEvents = new MutableLiveData<>();
     HashMap<String, Event> inMemoryEvents;
 
     private LogedUserCallback logedUserCallback;
@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        loginsClicked = -10;
         mainFragmentManager = getSupportFragmentManager();
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     @Override
     public void onLocationChanged(@NonNull Location location) {
-        Toast.makeText(this, "onLocationChanged Invoked", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "onLocationChanged Invoked", Toast.LENGTH_SHORT).show();
 
         userLat = location.getLatitude();
         userLon = location.getLongitude();
@@ -120,7 +121,13 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             EventController.getInstance().getNearEvents(userGeohash, userLat, userLon, new GeoQueryEventListener() {
                 @Override
                 public void onKeyEntered(String key, GeoLocation location) {
-
+                    EventController.getInstance().getEvent(key, new OnSuccessListener<DataSnapshot>() {
+                        @Override
+                        public void onSuccess(DataSnapshot dataSnapshot) {
+                            Event eventInRange = dataSnapshot.getValue(Event.class);
+                            nearEvents.postValue(eventInRange);
+                        }
+                    });
                 }
 
                 @Override

@@ -2,6 +2,7 @@ package com.example.meetnature.home.ui.main;
 
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
@@ -13,10 +14,14 @@ import org.osmdroid.config.Configuration;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
 import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -33,7 +38,13 @@ import android.widget.Toast;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
+import com.example.meetnature.data.models.Event;
+import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.addevent.AddEventFragment;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
+import java.util.HashMap;
 
 public class HomeFragment extends Fragment {
 
@@ -78,24 +89,6 @@ public class HomeFragment extends Fragment {
         //NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.home_fragment);
         //NavController navController = navHostFragment.getNavController();
 
-        //setup map:
-        Context context = mainActivity.getApplicationContext();
-        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
-        mapView = (MapView)view.findViewById(R.id.homepage_homefragment_map);
-        mapView.setMultiTouchControls(true);
-        mapController = mapView.getController();
-
-        if(ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-        {
-            ActivityCompat.requestPermissions(mainActivity, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACCESS_FINE_LOCATION);
-        }
-        else
-        {
-            setupMap();
-        }
-
-
         view.findViewById(R.id.homepage_homefragment_floatmap_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -131,10 +124,29 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        Toast.makeText(mainActivity, "Loginsclicked = " + MainActivity.loginsClicked, Toast.LENGTH_SHORT).show();
         if (MainActivity.loginsClicked > 0)
         {
-            MainActivity.loginsClicked--;
+            Toast.makeText(mainActivity, "Calling Logout ON CLICK", Toast.LENGTH_SHORT).show();
+            MainActivity.loginsClicked = -10;
             view.findViewById(R.id.home_logout_btn).callOnClick();
+        }
+
+        //setup map:
+        Context context = mainActivity.getApplicationContext();
+        Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
+        mapView = (MapView)view.findViewById(R.id.homepage_homefragment_map);
+        mapView.setMultiTouchControls(true);
+        mapController = mapView.getController();
+
+        if(ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+        {
+            ActivityCompat.requestPermissions(mainActivity, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_ACCESS_FINE_LOCATION);
+        }
+        else
+        {
+            setupMap();
         }
     }
 
@@ -163,6 +175,40 @@ public class HomeFragment extends Fragment {
             mapController.setZoom(15.0);
             myLocationNewOverlay.enableFollowLocation();
             mapController.setCenter(myLocationNewOverlay.getMyLocation());
+
+            setupMarkerCallback();
         }
+    }
+
+    private void setupMarkerCallback(){
+        MainActivity.nearEvents.observe(mainActivity, new Observer<Event>() {
+            @Override
+            public void onChanged(Event event) {
+                Marker marker = new Marker(mapView);
+                marker.setPosition(new GeoPoint(event.getLat(), event.getLon()));
+                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+                // set Image on marker:
+                String imageUrl = event.getImageUrl();
+                Picasso.get().load(imageUrl).into(new Target() {
+                    @Override
+                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                        Drawable markerImage = new BitmapDrawable(bitmap);
+                        marker.setIcon(markerImage);
+                    }
+
+                    @Override
+                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+
+                    }
+
+                    @Override
+                    public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                    }
+                });
+
+            }
+        });
     }
 }

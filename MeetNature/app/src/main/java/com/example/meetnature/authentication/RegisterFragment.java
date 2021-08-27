@@ -91,6 +91,8 @@ public class RegisterFragment extends Fragment {
                 loginUser.email = email;
                 loginUser.password = password;
                 loginUser.username = username;
+
+                MainActivity.loginsClicked = 0;
                 authenticationViewModel.registerUser(loginUser);
             }
         });
