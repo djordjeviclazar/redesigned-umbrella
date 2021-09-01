@@ -11,15 +11,19 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.meetnature.authentication.AuthenticationController;
 import com.example.meetnature.authentication.AuthenticationViewModel;
 import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.controllers.UserController;
@@ -103,6 +107,34 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
     public void setLogedUserCallback(LogedUserCallback logedUserCallback){
         this.logedUserCallback = logedUserCallback;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+
+            this.getMenuInflater().inflate(R.menu.main_menu, menu);
+            return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if(id == R.id.home_logout_btn)
+        {
+            //Toast.makeText(this, "LOGOUT IN MENU CLICKED", Toast.LENGTH_SHORT).show();
+            AuthenticationController controller = AuthenticationController.getInstance();
+            controller.logout();
+            mainFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+            recreate();
+        }
+
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
