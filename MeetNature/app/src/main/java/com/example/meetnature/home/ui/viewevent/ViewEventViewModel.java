@@ -9,7 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 
 public class ViewEventViewModel extends ViewModel {
-
+/*
     MutableLiveData<Event> eventMutableLiveData = new MutableLiveData<>();
 
     public void getEvent(String uid){
@@ -20,5 +20,5 @@ public class ViewEventViewModel extends ViewModel {
                 eventMutableLiveData.postValue(event);
             }
         });
-    }
+    }*/
 }

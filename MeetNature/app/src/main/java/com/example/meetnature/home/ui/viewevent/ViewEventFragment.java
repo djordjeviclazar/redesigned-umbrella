@@ -32,6 +32,7 @@ import com.example.meetnature.data.models.User;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -87,10 +88,12 @@ public class ViewEventFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
         mainFragmentManager = mainActivity.getMainFragmentManager();
 
-        mViewModel.getEvent(eventUid);
-        mViewModel.eventMutableLiveData.observe(mainActivity, new Observer<Event>() {
+        EventController.getInstance().getEvent(eventUid, new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onChanged(Event event) {
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                Event event = dataSnapshot.getValue(Event.class);
+                //eventMutableLiveData.postValue(event);
+
                 //setup map:
                 Context context = mainActivity.getApplicationContext();
                 Configuration.getInstance().load(context, PreferenceManager.getDefaultSharedPreferences(context));
@@ -137,7 +140,7 @@ public class ViewEventFragment extends Fragment {
 
                 Button action = (Button)view.findViewById(R.id.event_going_btn);
                 if (!event.getFinished()) {
-                    
+
                     if (event.getOrganizer().getUid() == mainActivity.getUser().getUid()) {
                         if (event.getTime().compareTo(new Date()) >= 0){
                             action.setText("Finish event");
@@ -200,5 +203,14 @@ public class ViewEventFragment extends Fragment {
                 }
             }
         });
+
+        /*
+        mViewModel.getEvent(eventUid);
+        mViewModel.eventMutableLiveData.observe(mainActivity, new Observer<Event>() {
+            @Override
+            public void onChanged(Event event) {
+
+            }
+        });*/
     }
 }
