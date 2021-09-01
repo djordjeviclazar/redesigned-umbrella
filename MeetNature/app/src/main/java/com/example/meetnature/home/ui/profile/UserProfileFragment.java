@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class UserProfileFragment extends Fragment {
 
-    MainActivity mainActivity;
+    static MainActivity mainActivity;
 
     public UserProfileFragment() {
         // Required empty public constructor
@@ -96,7 +96,7 @@ public class UserProfileFragment extends Fragment {
         }
     }
 
-    public class OnClickListenerLinkEvent implements View.OnClickListener{
+    public static class OnClickListenerLinkEvent implements View.OnClickListener{
 
         private String eventUid;
 

@@ -127,6 +127,8 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        
+
         //Toast.makeText(mainActivity, "Loginsclicked = " + MainActivity.loginsClicked, Toast.LENGTH_SHORT).show();
         if (MainActivity.loginsClicked > 0)
         {

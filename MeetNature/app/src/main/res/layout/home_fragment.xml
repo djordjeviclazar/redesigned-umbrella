@@ -20,18 +20,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
 
-    <EditText
-        android:id="@+id/homepage_homefragment_eventtagsearch_txb"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.513"
-        app:layout_constraintStart_toStartOf="parent"
-
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.123" />
-
     <Button
         android:id="@+id/homepage_homefragment_searchaction_btn"
         android:layout_width="wrap_content"
@@ -39,10 +27,9 @@
         android:text="@string/Search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.506"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homepage_homefragment_eventtagsearch_txb"
-        app:layout_constraintVertical_bias="0.043" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.202" />
 
     <TextView
         android:id="@+id/WelcomeText_label"
@@ -77,8 +64,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.478"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/homepage_homefragment_searchaction_btn"
-        app:layout_constraintVertical_bias="0.298" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.438" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/homepage_homefragment_floatmap_btn"
@@ -92,6 +79,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homepage_homefragment_searchaction_btn"
         app:layout_constraintVertical_bias="0.881" />
+
+    <Spinner
+        android:id="@+id/home_fragment_spinner"
+        android:layout_width="290dp"
+        android:layout_height="28dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.115" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
