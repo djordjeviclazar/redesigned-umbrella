@@ -1,7 +1,11 @@
 package com.example.meetnature.controllers;
 
-import androidx.annotation.NonNull;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.data.models.User;
@@ -11,6 +15,7 @@ import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryBounds;
+import com.firebase.geofire.GeoQueryDataEventListener;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -22,17 +27,21 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.firestore.GeoPoint;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EventController {
 
     private UserController userController;
     private User user;
     private DatabaseReference context;
-    private GeoFire geoFireReference;
+    private GeoFire geoFireContext;
+    //private GeoFire geoFireReference;
     private GeoQuery geoQuery;
 
     private static EventController instance = null;
@@ -41,7 +50,8 @@ public class EventController {
         userController = UserController.getInstance();
         user = UserController.getInstance().getCurrentUser();
         context = FirebaseDatabase.getInstance(taksiDoBaze.dbURL).getReference().child("Event");
-        geoFireReference = new GeoFire(FirebaseDatabase.getInstance(taksiDoBaze.dbURL).getReference().child("EventLocations"));
+        geoFireContext = new GeoFire(context);
+        //geoFireReference = new GeoFire(FirebaseDatabase.getInstance(taksiDoBaze.dbURL).getReference().child("EventLocations"));
         geoQuery = null;
     }
 
@@ -63,7 +73,12 @@ public class EventController {
         organizer.setUsername(currentUser.getUsername());
         event.setOrganizer(organizer);
 
-        geoFireReference.setLocation(uid, new GeoLocation(event.getLat(), event.getLon()));
+        Map<String, Object> geoFireObject = new HashMap<>();
+        geoFireObject.put("geohash", GeoFireUtils.getGeoHashForLocation(new GeoLocation(event.getLat(), event.getLon())));
+        geoFireObject.put("lat", event.getLat());
+        geoFireObject.put("lon", event.getLon());
+
+        //geoFireReference.setLocation(uid, geoFireObject);
 
         userController.addEvent(event, new SmallEventAddedCallback(uid, event, callback));
 
@@ -91,9 +106,66 @@ public class EventController {
         UserController.getInstance().followEvent(event, callback);
     }
 
+    public ArrayList<Event> getSearchedEvents(String tag){
+        ArrayList<Event> result = new ArrayList<>();
+
+        context.get().addOnSuccessListener(dataSnapshot -> {
+            for (DataSnapshot data : dataSnapshot.getChildren()){
+                Event eventData = data.getValue(Event.class);
+
+                if (eventData.getTag().equals(tag)) {
+                    result.add(eventData);
+                }
+            }
+        });
+
+        return result;
+    }
+
+    public void getEventsInRadius(GeoLocation center, double radius, OnSuccessListener callback){
+        context.get().addOnSuccessListener(dataSnapshot -> {
+            for (DataSnapshot data : dataSnapshot.getChildren()){
+                Event eventData = data.getValue(Event.class);
+                if (GeoFireUtils.getDistanceBetween(center, new GeoLocation(eventData.getLat(), eventData.getLon())) <= radius) {
+                    callback.onSuccess(eventData);
+                }
+            }
+        });
+        context.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                Event eventData = snapshot.getValue(Event.class);
+                if (GeoFireUtils.getDistanceBetween(center, new GeoLocation(eventData.getLat(), eventData.getLon())) <= radius) {
+                    callback.onSuccess(eventData);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void getNearEvents(String currentGeoHash, double currentLat, double currentLon, GeoQueryEventListener callback){
         if (geoQuery == null) {
-            geoQuery = geoFireReference.queryAtLocation(new GeoLocation(currentLat, currentLon), 50.);
+            //geoQuery = geoFireReference.queryAtLocation(new GeoLocation(currentLat, currentLon), 50.);
+            geoQuery = geoFireContext.queryAtLocation(new GeoLocation(currentLat, currentLon), 0.5);
             geoQuery.addGeoQueryEventListener(callback);
         }
         else{
@@ -125,6 +197,16 @@ public class EventController {
                 }
             }
         })*/
+    }
+
+    public void getNearEventsData(String currentGeoHash, double currentLat, double currentLon, GeoQueryDataEventListener callback){
+        if(geoQuery == null){
+            geoQuery = geoFireContext.queryAtLocation(new GeoLocation(currentLat, currentLon), 500.);
+            geoQuery.addGeoQueryDataEventListener(callback);
+        }
+        else {
+            geoQuery.setCenter(new GeoLocation(currentLat, currentLon));
+        }
     }
 
     // callbacks:

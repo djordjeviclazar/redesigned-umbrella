@@ -51,9 +51,11 @@ public class HomeFragment extends Fragment {
     private HomeViewModel mViewModel;
     private MainActivity mainActivity;
     private FragmentManager mainFragmentManager;
-    private MapView mapView;
-    private IMapController mapController;
-    private MyLocationNewOverlay myLocationNewOverlay;
+    private static MapView mapView;
+    private static IMapController mapController;
+    private static MyLocationNewOverlay myLocationNewOverlay;
+
+    private Observer<Event> myObserver;
 
     final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
 
@@ -66,6 +68,7 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        myObserver = null;
 
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
@@ -124,10 +127,10 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        Toast.makeText(mainActivity, "Loginsclicked = " + MainActivity.loginsClicked, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(mainActivity, "Loginsclicked = " + MainActivity.loginsClicked, Toast.LENGTH_SHORT).show();
         if (MainActivity.loginsClicked > 0)
         {
-            Toast.makeText(mainActivity, "Calling Logout ON CLICK", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(mainActivity, "Calling Logout ON CLICK", Toast.LENGTH_SHORT).show();
             MainActivity.loginsClicked = -10;
             view.findViewById(R.id.home_logout_btn).callOnClick();
         }
@@ -147,6 +150,15 @@ public class HomeFragment extends Fragment {
         else
         {
             setupMap();
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        if (myObserver != null){
+            MainActivity.nearEvents.removeObserver(myObserver);
         }
     }
 
@@ -176,39 +188,46 @@ public class HomeFragment extends Fragment {
             myLocationNewOverlay.enableFollowLocation();
             mapController.setCenter(myLocationNewOverlay.getMyLocation());
 
-            setupMarkerCallback();
+            setupMarkerCallback(mapView);
         }
     }
 
-    private void setupMarkerCallback(){
-        MainActivity.nearEvents.observe(mainActivity, new Observer<Event>() {
-            @Override
-            public void onChanged(Event event) {
-                Marker marker = new Marker(mapView);
-                marker.setPosition(new GeoPoint(event.getLat(), event.getLon()));
-                marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+    private void setupMarkerCallback(MapView mapViewArg){
+        Toast.makeText(getActivity(), "Marker callback", Toast.LENGTH_SHORT).show();
+        if (myObserver == null){
+            myObserver = new Observer<Event>() {
+                @Override
+                public void onChanged(Event event) {
+                    Toast.makeText(getActivity(), event.getEventName() + " adding to map", Toast.LENGTH_SHORT).show();
+                    if (mapViewArg != null) {
+                        Marker marker = new Marker(mapViewArg);
+                        marker.setPosition(new GeoPoint(event.getLat(), event.getLon()));
+                        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-                // set Image on marker:
-                String imageUrl = event.getImageUrl();
-                Picasso.get().load(imageUrl).into(new Target() {
-                    @Override
-                    public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                        Drawable markerImage = new BitmapDrawable(bitmap);
-                        marker.setIcon(markerImage);
+                        // set Image on marker:
+                        String imageUrl = event.getImageUrl();
+                        Picasso.get().load(imageUrl).into(new Target() {
+                            @Override
+                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                Drawable markerImage = new BitmapDrawable(bitmap);
+                                marker.setIcon(markerImage);
+                                mapView.getOverlays().add(marker);
+                            }
+
+                            @Override
+                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                mapView.getOverlays().add(marker);
+                            }
+
+                            @Override
+                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                            }
+                        });
                     }
-
-                    @Override
-                    public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-
-                    }
-
-                    @Override
-                    public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                    }
-                });
-
-            }
-        });
+                }
+            };
+        }
+        MainActivity.nearEvents.observe(mainActivity, myObserver);
     }
 }

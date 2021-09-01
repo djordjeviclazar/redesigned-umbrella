@@ -29,6 +29,7 @@ import com.example.meetnature.home.ui.main.HomeFragment;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.GeoQueryDataEventListener;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.firebase.geofire.core.GeoHash;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -117,46 +118,95 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             user.setLon(userLon);
             user.setLat(userLat);
             user.setGeoHash(userGeohash);
-
-            EventController.getInstance().getNearEvents(userGeohash, userLat, userLon, new GeoQueryEventListener() {
-                @Override
-                public void onKeyEntered(String key, GeoLocation location) {
-                    EventController.getInstance().getEvent(key, new OnSuccessListener<DataSnapshot>() {
-                        @Override
-                        public void onSuccess(DataSnapshot dataSnapshot) {
-                            Event eventInRange = dataSnapshot.getValue(Event.class);
-                            nearEvents.postValue(eventInRange);
-                        }
-                    });
-                }
-
-                @Override
-                public void onKeyExited(String key) {
-
-                }
-
-                @Override
-                public void onKeyMoved(String key, GeoLocation location) {
-
-                }
-
-                @Override
-                public void onGeoQueryReady() {
-
-                }
-
-                @Override
-                public void onGeoQueryError(DatabaseError error) {
-
-                }
-            });
         }
+
+        EventController.getInstance().getEventsInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+
+                Event eventData = (Event)o;
+                //Toast.makeText(MainActivity.this, eventData.getEventName() + " event is added to MutableLiveData", Toast.LENGTH_SHORT).show();
+                nearEvents.postValue(eventData);
+            }
+        });
+
+        /*
+        EventController.getInstance().getNearEventsData(userGeohash, userLat, userLon, new GeoQueryDataEventListener(){
+            @Override
+            public void onDataEntered(DataSnapshot dataSnapshot, GeoLocation location) {
+                Event eventData = dataSnapshot.getValue(Event.class);
+                nearEvents.postValue(eventData);
+            }
+
+            @Override
+            public void onDataExited(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onDataMoved(DataSnapshot dataSnapshot, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onDataChanged(DataSnapshot dataSnapshot, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+        */
+
+        /*
+        EventController.getInstance().getNearEvents(userGeohash, userLat, userLon, new GeoQueryEventListener() {
+            @Override
+            public void onKeyEntered(String key, GeoLocation location) {
+                EventController.getInstance().getEvent(key, new OnSuccessListener<DataSnapshot>() {
+                    @Override
+                    public void onSuccess(DataSnapshot dataSnapshot) {
+                        Event eventInRange = dataSnapshot.getValue(Event.class);
+                        nearEvents.postValue(eventInRange);
+                    }
+                });
+            }
+
+            @Override
+            public void onKeyExited(String key) {
+
+            }
+
+            @Override
+            public void onKeyMoved(String key, GeoLocation location) {
+
+            }
+
+            @Override
+            public void onGeoQueryReady() {
+
+            }
+
+            @Override
+            public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });*/
     }
 
     public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
 
         @Override
         public void onSuccess(DataSnapshot dataSnapshot) {
+
+            nearEvents = new MutableLiveData<>();
+
              MainActivity.this.user = dataSnapshot.getValue(User.class);
              user.setLon(userLon);
              user.setLat(userLat);
