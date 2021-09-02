@@ -160,7 +160,7 @@ public class ViewEventFragment extends Fragment {
                                     double currentLat = mainActivity.getUser().getLat();
                                     double currentLon = mainActivity.getUser().getLon();
                                     double distance = GeoFireUtils.getDistanceBetween(new GeoLocation(currentLat, currentLon), new GeoLocation(event.getLat(), event.getLon()));
-                                    if (distance < 10){
+                                    if (distance < 50){
                                         action.setOnClickListener(new View.OnClickListener() {
                                             @Override
                                             public void onClick(View v) {

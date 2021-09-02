@@ -52,6 +52,7 @@ public class UserProfileFragment extends Fragment {
         mainActivity = (MainActivity)getActivity();
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

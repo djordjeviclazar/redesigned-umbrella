@@ -41,10 +41,12 @@ import com.example.meetnature.R;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.addevent.AddEventFragment;
+import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.util.HashMap;
+import java.util.List;
 
 public class HomeFragment extends Fragment {
 
@@ -55,7 +57,8 @@ public class HomeFragment extends Fragment {
     private static IMapController mapController;
     private static MyLocationNewOverlay myLocationNewOverlay;
 
-    private Observer<Event> myObserver;
+    private Observer<List<Event>> myObserver;
+    private HashMap<String, Event> addedEvents;
 
     final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
 
@@ -69,6 +72,7 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         myObserver = null;
+        addedEvents = new HashMap<>();
 
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
@@ -162,6 +166,7 @@ public class HomeFragment extends Fragment {
         if (myObserver != null){
             MainActivity.nearEvents.removeObserver(myObserver);
         }
+        addedEvents = null;
     }
 
     @SuppressLint("Missing permission")
@@ -197,39 +202,65 @@ public class HomeFragment extends Fragment {
     private void setupMarkerCallback(MapView mapViewArg){
         Toast.makeText(getActivity(), "Marker callback", Toast.LENGTH_SHORT).show();
         if (myObserver == null){
-            myObserver = new Observer<Event>() {
+            myObserver = new Observer<List<Event>>() {
                 @Override
-                public void onChanged(Event event) {
-                    Toast.makeText(getActivity(), event.getEventName() + " adding to map", Toast.LENGTH_SHORT).show();
-                    if (mapViewArg != null) {
-                        Marker marker = new Marker(mapViewArg);
-                        marker.setPosition(new GeoPoint(event.getLat(), event.getLon()));
-                        marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                public void onChanged(List<Event> events) {
+                    for (Event event : events){
+                        //Toast.makeText(getActivity(), event.getEventName() + " adding to map", Toast.LENGTH_SHORT).show();
+                        boolean isAdded = addedEvents.containsKey(event.getUId());
+                        if (!isAdded) {
+                            addedEvents.put(event.getUId(), event);
 
-                        // set Image on marker:
-                        String imageUrl = event.getImageUrl();
-                        Picasso.get().load(imageUrl).into(new Target() {
-                            @Override
-                            public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                                Drawable markerImage = new BitmapDrawable(bitmap);
-                                marker.setIcon(markerImage);
-                                mapView.getOverlays().add(marker);
-                            }
+                            Marker marker = new Marker(mapViewArg);
+                            marker.setPosition(new GeoPoint(event.getLat(), event.getLon()));
+                            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                            marker.setId(event.getUId());
 
-                            @Override
-                            public void onBitmapFailed(Exception e, Drawable errorDrawable) {
-                                mapView.getOverlays().add(marker);
-                            }
 
-                            @Override
-                            public void onPrepareLoad(Drawable placeHolderDrawable) {
+                            // set Image on marker:
+                            String imageUrl = event.getImageUrl();
+                            Picasso.get().load(imageUrl).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    Drawable markerImage = new BitmapDrawable(bitmap);
+                                    marker.setIcon(markerImage);
+                                    mapView.getOverlays().add(marker);
+                                    marker.setOnMarkerClickListener(new OnMarkerCustomClickListener(event.getUId()));
+                                }
 
-                            }
-                        });
+                                @Override
+                                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    mapView.getOverlays().add(marker);
+                                    marker.setOnMarkerClickListener(new OnMarkerCustomClickListener(event.getUId()));
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            });
+                        }
                     }
                 }
             };
         }
         MainActivity.nearEvents.observe(mainActivity, myObserver);
+    }
+
+    public class OnMarkerCustomClickListener implements Marker.OnMarkerClickListener {
+
+        private String eventUid;
+        public OnMarkerCustomClickListener(String eventUid){this.eventUid  = eventUid;}
+
+        @Override
+        public boolean onMarkerClick(Marker marker, MapView mapView) {
+
+            Bundle bundle = new Bundle();
+            bundle.putString("eventUid", eventUid);
+            mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, ViewEventFragment.class, bundle)
+                    .setReorderingAllowed(true).addToBackStack(null).commit();
+
+            return true;
+        }
     }
 }

@@ -42,6 +42,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     FragmentManager mainFragmentManager;
     LocationManager locationManager;
 
-    public static MutableLiveData<Event> nearEvents = new MutableLiveData<>();
+    public static MutableLiveData<List<Event>> nearEvents = new MutableLiveData<>();
     HashMap<String, Event> inMemoryEvents;
 
     private LogedUserCallback logedUserCallback;
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                     UserController.getInstance().getUser(new GetUserCallback());
                 }
                 else {
-                    Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -158,7 +159,9 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
                 Event eventData = (Event)o;
                 //Toast.makeText(MainActivity.this, eventData.getEventName() + " event is added to MutableLiveData", Toast.LENGTH_SHORT).show();
-                nearEvents.postValue(eventData);
+                List<Event> previousEvents = nearEvents.getValue() == null ? new ArrayList<>() : nearEvents.getValue();
+                previousEvents.add(eventData);
+                nearEvents.postValue(previousEvents);
             }
         });
 
