@@ -28,7 +28,9 @@ import com.example.meetnature.R;
 import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
+import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.data.models.User;
+import com.example.meetnature.home.ui.threewinersspinners.Three_winers_spinners;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -147,38 +149,67 @@ public class ViewEventFragment extends Fragment {
                             action.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString("eventUid", eventUid);
+                                    mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, Three_winers_spinners.class, bundle)
+                                            .setReorderingAllowed(true).addToBackStack(null).commit();
                                 }
                             });
                         }
-                    }else {
+                        else {
+                            action.setEnabled(false);
+                            action.setVisibility(View.GONE);
+                        }
+                    }
+                    else {
                         if (event.getTime().compareTo(new Date()) >= 0){
-                            action.setText("Attend");
-                            action.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    double currentLat = mainActivity.getUser().getLat();
-                                    double currentLon = mainActivity.getUser().getLon();
-                                    double distance = GeoFireUtils.getDistanceBetween(new GeoLocation(currentLat, currentLon), new GeoLocation(event.getLat(), event.getLon()));
-                                    if (distance < 50){
-                                        action.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View v) {
-                                                EventController.getInstance().attendEvent(event, mainActivity.getUser(), new OnSuccessListener() {
-                                                    @Override
-                                                    public void onSuccess(Object o) {
-                                                        action.setEnabled(false);
-                                                        Toast.makeText(mainActivity, "Good Luck!", Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
-                                            }
-                                        });
-                                    }else {
-                                        Toast.makeText(mainActivity, "You must be on exact place of event to attend. Go to place on map and try again.", Toast.LENGTH_SHORT).show();
+                            if (event.getFollowersCount() >= event.getCapacity()) {
+                                action.setEnabled(false);
+                                action.setText("NO MORE PLACE!");
+                            }
+                            else {
+                                boolean isAttendant = false;
+                                for (SmallUser attendant : event.getAttendants().values()){
+                                    if (attendant.getUid() == mainActivity.getUser().getUid()){
+                                        isAttendant = true;
+                                        break;
                                     }
                                 }
-                            });
-                        }else {
+                                if (isAttendant) {
+                                    action.setText("Attend");
+                                    action.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            double currentLat = mainActivity.getUser().getLat();
+                                            double currentLon = mainActivity.getUser().getLon();
+                                            double distance = GeoFireUtils.getDistanceBetween(new GeoLocation(currentLat, currentLon), new GeoLocation(event.getLat(), event.getLon()));
+                                            if (distance < 50) {
+                                                action.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        EventController.getInstance().attendEvent(event, mainActivity.getUser(), new OnSuccessListener() {
+                                                            @Override
+                                                            public void onSuccess(Object o) {
+                                                                action.setEnabled(false);
+                                                                Toast.makeText(mainActivity, "Good Luck!", Toast.LENGTH_SHORT).show();
+                                                            }
+                                                        });
+                                                    }
+                                                });
+                                            } else {
+                                                Toast.makeText(mainActivity, "You must be on exact place of event to attend. Go to place on map and try again.", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    action.setEnabled(false);
+                                    action.setVisibility(View.GONE);
+                                    Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+                        else {
                             action.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {

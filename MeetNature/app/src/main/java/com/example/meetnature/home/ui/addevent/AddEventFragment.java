@@ -164,13 +164,15 @@ public class AddEventFragment extends Fragment {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            Toast.makeText(mainActivity, "Event picture is added", Toast.LENGTH_SHORT).show();
+                            /*
                             EventController.getInstance().addEvent(event, new OnSuccessListener() {
                                 @Override
                                 public void onSuccess(Object o) {
                                     Toast.makeText(mainActivity, "Event is added", Toast.LENGTH_SHORT).show();
                                     //TODO: redirect to event page
                                 }
-                            });
+                            });*/
                         }
                     });
 

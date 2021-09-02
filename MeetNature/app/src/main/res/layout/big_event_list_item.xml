@@ -7,7 +7,7 @@
     tools:context=".MainActivity">
 
     <ImageButton
-        android:id="@+id/simple_event_list_item_image"
+        android:id="@+id/big_event_list_item_image"
         android:layout_width="134dp"
         android:layout_height="110dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -19,7 +19,7 @@
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
-        android:id="@+id/simple_event_list_item_event_name_lbl"
+        android:id="@+id/big_event_list_item_event_name_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
@@ -31,20 +31,20 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
-        android:id="@+id/simple_event_list_item_tag_lbl"
+        android:id="@+id/big_event_list_item_tag_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginBottom="328dp"
         android:text="TextView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/simple_event_list_item_event_name_lbl"
-        app:layout_constraintVertical_bias="0.012" />
+        app:layout_constraintTop_toBottomOf="@+id/big_event_list_username"
+        app:layout_constraintVertical_bias="0.063" />
 
     <Button
-        android:id="@+id/simple_event_list_item_link_btn"
+        android:id="@+id/big_event_list_item_link_btn"
         android:layout_width="83dp"
         android:layout_height="80dp"
         android:text="View"
@@ -54,4 +54,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.015" />
+
+    <TextView
+        android:id="@+id/big_event_list_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.071" />
 </androidx.constraintlayout.widget.ConstraintLayout>

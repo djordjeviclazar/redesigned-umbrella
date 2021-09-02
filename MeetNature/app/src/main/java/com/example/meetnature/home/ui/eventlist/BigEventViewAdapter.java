@@ -40,19 +40,19 @@ class BigEventViewAdapter extends ArrayAdapter<Event> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View item = convertView;
         if (item == null){
-            item = LayoutInflater.from(mainContext).inflate(R.layout.simple_event_list_item, parent, false);
+            item = LayoutInflater.from(mainContext).inflate(R.layout.big_event_list_item, parent, false);
         }
 
         Event Event = eventList.get(position);
-        ImageButton img = (ImageButton)item.findViewById(R.id.simple_event_list_item_image);
+        ImageButton img = (ImageButton)item.findViewById(R.id.big_event_list_item_image);
         Picasso.get().load(Event.getImageUrl()).resize(100, 100).into(img);
 
-        ((TextView)item.findViewById(R.id.simple_event_list_item_event_name_lbl)).setText(Event.getEventName());
-        ((TextView)item.findViewById(R.id.simple_event_list_item_tag_lbl)).setText(Event.getTag());
-        ((TextView)item.findViewById(R.id.simple_event_list_username)).setText(Event.getOrganizer().getUsername());
+        ((TextView)item.findViewById(R.id.big_event_list_item_event_name_lbl)).setText(Event.getEventName());
+        ((TextView)item.findViewById(R.id.big_event_list_item_tag_lbl)).setText(Event.getTag());
+        ((TextView)item.findViewById(R.id.big_event_list_username)).setText(Event.getOrganizer().getUsername());
 
         onClickListenerLinkEvent.setEventUid(Event.getUId());
-        item.findViewById(R.id.simple_event_list_item_link_btn).setOnClickListener(onClickListenerLinkEvent);
+        item.findViewById(R.id.big_event_list_item_link_btn).setOnClickListener(onClickListenerLinkEvent);
 
         return item;
     }

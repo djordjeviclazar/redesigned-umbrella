@@ -209,6 +209,10 @@ public class EventController {
         }
     }
 
+    public void finishEvent(String uid){
+        context.child(uid).child("finished").setValue(true);
+    }
+
     // callbacks:
 
     public class SmallEventAddedCallback implements OnSuccessListener{
