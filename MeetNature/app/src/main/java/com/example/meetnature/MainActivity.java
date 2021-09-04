@@ -153,6 +153,8 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             user.setLat(userLat);
             user.setGeoHash(userGeohash);
 
+            UserController.getInstance().updateCurrentUserLocation(userLat, userLon);
+
             EventController.getInstance().getEventsInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
                 @Override
                 public void onSuccess(Object o) {
