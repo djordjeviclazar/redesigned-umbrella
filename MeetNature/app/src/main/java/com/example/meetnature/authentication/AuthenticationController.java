@@ -3,6 +3,7 @@ package com.example.meetnature.authentication;
 
 import androidx.annotation.NonNull;
 
+import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -18,9 +19,12 @@ public class AuthenticationController implements Executor {
     private FirebaseUser user;
     private Observable loginCompleted;
 
+    private UserController userController;
+
     private static AuthenticationController instance = null;
     private AuthenticationController(){
         firebaseAuth = FirebaseAuth.getInstance();
+        userController = UserController.getInstance();
         loginCompleted = new Observable();
     }
 
@@ -99,6 +103,7 @@ public class AuthenticationController implements Executor {
 
     public boolean logout(){
         firebaseAuth.signOut();
+        userController.setInactive();
         user = null;
         return true;
     }

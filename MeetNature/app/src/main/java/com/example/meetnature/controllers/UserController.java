@@ -1,16 +1,32 @@
 package com.example.meetnature.controllers;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.example.meetnature.data.models.Badges;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
+import com.firebase.geofire.GeoFireUtils;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.meetnature.helpers.*;
+import com.google.type.DateTime;
+
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class UserController {
 
@@ -54,6 +70,7 @@ public class UserController {
             @Override
             public void onSuccess(DataSnapshot dataSnapshot) {
                 user = dataSnapshot.getValue(User.class);
+                setActive();
             }
         });
     }
@@ -98,4 +115,103 @@ public class UserController {
         context.child(uid).child("badges").child(key).setValue(badge);
     }
 
+    public void getUsersInRadius(GeoLocation center, double radius, OnSuccessListener callback){
+        context.get().addOnSuccessListener(dataSnapshot -> {
+            for (DataSnapshot data : dataSnapshot.getChildren()){
+                User userData = data.getValue(User.class);
+
+                if (isInRangeActive(userData, center, radius)) {
+                    callback.onSuccess(userData);
+                }
+            }
+        });
+        context.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User userData = snapshot.getValue(User.class);
+                if (isInRangeActive(userData, center, radius)) {
+                    callback.onSuccess(userData);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                User userData = snapshot.getValue(User.class);
+                if (isInRangeActive(userData, center, radius)) {
+                    callback.onSuccess(userData);
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private boolean isInRangeActive(User otherUser, GeoLocation center, double radius){
+
+        boolean isInRange = GeoFireUtils.getDistanceBetween(center, new GeoLocation(otherUser.getLat(), otherUser.getLon())) <= radius;
+        boolean isActive = otherUser.isActive();
+        boolean notCurrentUser = otherUser.getUid().equals(user.getUid());
+
+        // check if isActive is set before 15 mins:
+        Date lastActive = otherUser.getLastActive();
+
+        Date now = new Date();
+        Calendar calendarNow  = Calendar.getInstance();
+        calendarNow.setTime(now);
+        calendarNow.add(Calendar.MINUTE, -15);
+        boolean isBefore  = lastActive == null ? false : calendarNow.getTime().before(lastActive);
+
+        return isInRange && notCurrentUser && isActive && isBefore;
+    }
+
+    // Only works if currentUser is not null, don't call outside of Activity
+    public void updateCurrentUserLocation(double lat, double lon) {
+        Date now = new Date();
+
+        if (user != null){
+            /*
+            user.setLat(lat);
+            user.setLon(lon);
+            user.setGeoHash(GeoFireUtils.getGeoHashForLocation(new GeoLocation(lat, lon)));
+             */
+            Map<String, Object> userLocationProperties = new HashMap<>();
+            userLocationProperties.put("lat", lat);
+            userLocationProperties.put("lon", lon);
+            userLocationProperties.put("geohash", GeoFireUtils.getGeoHashForLocation(new GeoLocation(lat, lon)));
+            userLocationProperties.put("isActive", true);
+            userLocationProperties.put("lastActive", now);
+
+            context.child(user.getUid()).updateChildren(userLocationProperties);
+        }
+    }
+
+    public void setActive(){
+        Date now = new Date();
+
+        Map<String, Object> userLocationProperties = new HashMap<>();
+        userLocationProperties.put("isActive", true);
+        userLocationProperties.put("lastActive", now);
+
+        context.child(user.getUid()).updateChildren(userLocationProperties);
+    }
+
+    public void setInactive(){
+        Map<String, Object> userLocationProperties = new HashMap<>();
+        userLocationProperties.put("isActive", false);
+
+        context.child(user.getUid()).updateChildren(userLocationProperties);
+    }
 }

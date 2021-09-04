@@ -40,8 +40,10 @@ import android.widget.Toast;
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 import com.example.meetnature.data.models.Event;
+import com.example.meetnature.data.models.User;
 import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.addevent.AddEventFragment;
+import com.example.meetnature.home.ui.otherprofile.OtherProfileFragment;
 import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -60,7 +62,9 @@ public class HomeFragment extends Fragment {
     private static MyLocationNewOverlay myLocationNewOverlay;
 
     private Observer<List<Event>> myObserver;
+    private Observer<List<User>> myUserObserver;
     private HashMap<String, Event> addedEvents;
+    private HashMap<String, User> addedUsers;
 
     final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
 
@@ -74,7 +78,9 @@ public class HomeFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         mViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
         myObserver = null;
+        myUserObserver = null;
         addedEvents = new HashMap<>();
+        addedUsers = new HashMap<>();
 
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
@@ -110,17 +116,17 @@ public class HomeFragment extends Fragment {
                         .commit();
             }
         });
-
+        /*
         view.findViewById(R.id.profile_btn).setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Uso u profil", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Uso u profil", Toast.LENGTH_SHORT).show();
                 //setContentView(R.layout.user_profile_fragment);
                 //NavHostFragment.findNavController(HomeFragment.this)
                 //      .navigate(R.id.action_HomeFragment_to_UserProfileFragment);
             }
         });
-
+        */
         view.findViewById(R.id.home_logout_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +146,7 @@ public class HomeFragment extends Fragment {
         {
             //Toast.makeText(mainActivity, "Calling Logout ON CLICK", Toast.LENGTH_SHORT).show();
             MainActivity.loginsClicked = -10;
-            view.findViewById(R.id.home_logout_btn).callOnClick();
+            //view.findViewById(R.id.home_logout_btn).callOnClick();
         }
 /*
         ArrayList<String> tags = new ArrayList<>();
@@ -174,6 +180,11 @@ public class HomeFragment extends Fragment {
             MainActivity.nearEvents.removeObserver(myObserver);
         }
         addedEvents = null;
+
+        if (myUserObserver != null){
+            MainActivity.nearUsers.removeObserver(myUserObserver);
+        }
+        addedUsers = null;
     }
 
     @SuppressLint("Missing permission")
@@ -203,6 +214,7 @@ public class HomeFragment extends Fragment {
             mapController.setCenter(myLocationNewOverlay.getMyLocation());
 
             setupMarkerCallback(mapView);
+            setupUserMarkersCallback(mapView);
         }
     }
 
@@ -229,6 +241,7 @@ public class HomeFragment extends Fragment {
                             Picasso.get().load(imageUrl).into(new Target() {
                                 @Override
                                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    //Toast.makeText(getActivity(), "Loaded bitmap", Toast.LENGTH_SHORT).show();
                                     Drawable markerImage = new BitmapDrawable(bitmap);
                                     marker.setIcon(markerImage);
                                     mapView.getOverlays().add(marker);
@@ -237,6 +250,7 @@ public class HomeFragment extends Fragment {
 
                                 @Override
                                 public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    //Toast.makeText(getActivity(), "Failed bitmap", Toast.LENGTH_SHORT).show();
                                     mapView.getOverlays().add(marker);
                                     marker.setOnMarkerClickListener(new OnMarkerCustomClickListener(event.getUId()));
                                 }
@@ -254,6 +268,57 @@ public class HomeFragment extends Fragment {
         MainActivity.nearEvents.observe(mainActivity, myObserver);
     }
 
+    private void setupUserMarkersCallback(MapView mapViewArg){
+        //Toast.makeText(getActivity(), "Marker callback", Toast.LENGTH_SHORT).show();
+        if (myObserver == null){
+            myUserObserver = new Observer<List<User>>() {
+                @Override
+                public void onChanged(List<User> users) {
+                    for (User user : users){
+                        //Toast.makeText(getActivity(), event.getEventName() + " adding to map", Toast.LENGTH_SHORT).show();
+                        boolean isAdded = addedUsers.containsKey(user.getUid());
+                        if (!isAdded) {
+                            addedUsers.put(user.getUid(), user);
+
+                            Marker marker = new Marker(mapViewArg);
+                            marker.setPosition(new GeoPoint(user.getLat(), user.getLon()));
+                            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+                            marker.setId(user.getUid());
+
+
+                            // set Image on marker:
+                            String imageUrl = user.getImageUrl() == null ? user.getImageUrl() : taksiDoBaze.defaultImage;
+
+                            Picasso.get().load(imageUrl).into(new Target() {
+                                @Override
+                                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                                    //Toast.makeText(getActivity(), "Loaded bitmap", Toast.LENGTH_SHORT).show();
+                                    Drawable markerImage = new BitmapDrawable(bitmap);
+                                    marker.setIcon(markerImage);
+                                    mapView.getOverlays().add(marker);
+                                    marker.setOnMarkerClickListener(new OnUserMarkerCustomClickListener(user.getUid()));
+                                }
+
+                                @Override
+                                public void onBitmapFailed(Exception e, Drawable errorDrawable) {
+                                    //Toast.makeText(getActivity(), "Failed bitmap", Toast.LENGTH_SHORT).show();
+                                    mapView.getOverlays().add(marker);
+                                    marker.setOnMarkerClickListener(new OnUserMarkerCustomClickListener(user.getUid()));
+                                }
+
+                                @Override
+                                public void onPrepareLoad(Drawable placeHolderDrawable) {
+
+                                }
+                            });
+                        }
+                    }
+                }
+            };
+        }
+        MainActivity.nearUsers.observe(mainActivity, myUserObserver);
+    }
+
     public class OnMarkerCustomClickListener implements Marker.OnMarkerClickListener {
 
         private String eventUid;
@@ -267,6 +332,21 @@ public class HomeFragment extends Fragment {
             mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, ViewEventFragment.class, bundle)
                     .setReorderingAllowed(true).addToBackStack(null).commit();
 
+            return true;
+        }
+    }
+
+    public class OnUserMarkerCustomClickListener implements Marker.OnMarkerClickListener {
+        private String userUid;
+
+        public OnUserMarkerCustomClickListener(String userUid){this.userUid = userUid;}
+
+        @Override
+        public boolean onMarkerClick(Marker marker, MapView mapView) {
+            Bundle bundle = new Bundle();
+            bundle.putString("userUid", userUid);
+            mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, OtherProfileFragment.class, bundle)
+                    .setReorderingAllowed(true).addToBackStack(null).commit();
             return true;
         }
     }

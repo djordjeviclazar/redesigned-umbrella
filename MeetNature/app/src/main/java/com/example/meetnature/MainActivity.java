@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     LocationManager locationManager;
 
     public static MutableLiveData<List<Event>> nearEvents = new MutableLiveData<>();
+    public static MutableLiveData<List<User>> nearUsers = new MutableLiveData<>();
     HashMap<String, Event> inMemoryEvents;
 
     private LogedUserCallback logedUserCallback;
@@ -151,26 +152,39 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             user.setLon(userLon);
             user.setLat(userLat);
             user.setGeoHash(userGeohash);
+
+            EventController.getInstance().getEventsInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+
+                    Event eventData = (Event)o;
+                    //Toast.makeText(MainActivity.this, eventData.getEventName() + " event is added to MutableLiveData", Toast.LENGTH_SHORT).show();
+                    List<Event> previousEvents = nearEvents.getValue() == null ? new ArrayList<>() : nearEvents.getValue();
+                    previousEvents.add(eventData);
+                    nearEvents.postValue(previousEvents);
+                }
+            });
+
+            UserController.getInstance().getUsersInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
+                @Override
+                public void onSuccess(Object o) {
+                    User userData = (User)o;
+                    //Toast.makeText(MainActivity.this, eventData.getUsername() + " is added to MutableLiveData", Toast.LENGTH_SHORT).show();
+                    List<User> previousUsers = nearUsers.getValue() == null ? new ArrayList<>() : nearUsers.getValue();
+                    previousUsers.add(userData);
+                    nearUsers.postValue(previousUsers);
+                }
+            });
         }
-
-        EventController.getInstance().getEventsInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
-            @Override
-            public void onSuccess(Object o) {
-
-                Event eventData = (Event)o;
-                //Toast.makeText(MainActivity.this, eventData.getEventName() + " event is added to MutableLiveData", Toast.LENGTH_SHORT).show();
-                List<Event> previousEvents = nearEvents.getValue() == null ? new ArrayList<>() : nearEvents.getValue();
-                previousEvents.add(eventData);
-                nearEvents.postValue(previousEvents);
-            }
-        });
 
         /*
         EventController.getInstance().getNearEventsData(userGeohash, userLat, userLon, new GeoQueryDataEventListener(){
             @Override
             public void onDataEntered(DataSnapshot dataSnapshot, GeoLocation location) {
                 Event eventData = dataSnapshot.getValue(Event.class);
-                nearEvents.postValue(eventData);
+                List<Event> previousEvents = nearEvents.getValue() == null ? new ArrayList<>() : nearEvents.getValue();
+                previousEvents.add(eventData);
+                nearEvents.postValue(previousEvents);
             }
 
             @Override
@@ -241,6 +255,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
         public void onSuccess(DataSnapshot dataSnapshot) {
 
             nearEvents = new MutableLiveData<>();
+            nearUsers = new MutableLiveData<>();
 
              MainActivity.this.user = dataSnapshot.getValue(User.class);
              user.setLon(userLon);

@@ -2,6 +2,7 @@ package com.example.meetnature.data.models;
 
 import java.io.Serializable;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class User implements Serializable {
     private double lat;
     private double lon;
     private String geoHash;
+    private boolean isActive;
+    private Date lastActive;
 
     public User(){
 
@@ -160,5 +163,21 @@ public class User implements Serializable {
 
     public void setGeoHash(String geoHash) {
         this.geoHash = geoHash;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public Date getLastActive() {
+        return lastActive;
+    }
+
+    public void setLastActive(Date lastActive) {
+        this.lastActive = lastActive;
     }
 }
