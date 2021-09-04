@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Spinner;
 
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.controllers.UserController;
@@ -69,7 +70,7 @@ public class Three_winers_spinners extends Fragment {
                 Event event = dataSnapshot.getValue(Event.class);
                 attendats.addAll(event.getAttendants().values());
 
-                WinnerSpinnerAdapter goldAdapter = new WinnerSpinnerAdapter(getContext(), attendats);
+                WinnerSpinnerAdapter goldAdapter = new WinnerSpinnerAdapter(getContext(), attendats, 10, event.getTag());
                 goldAdapter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {

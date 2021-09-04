@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.meetnature.R;
+import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
@@ -28,11 +29,15 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
     private Context mainContext;
     private List<SmallUser> attendantsList = new ArrayList<>();
     private View.OnClickListener onClickListener;
+    private int value;
+    private String tag;
 
-    public WinnerSpinnerAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallUser> list) {
+    public WinnerSpinnerAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallUser> list, int value, String tag) {
         super(context, 0 , list);
         mainContext = context;
         attendantsList = list;
+        this.value = value;
+        this.tag = tag;
     }
 
     @NonNull
@@ -49,7 +54,13 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
 
         ((TextView)item.findViewById(R.id.spinner_user_list_item_username_lbl)).setText(smallUser.getUsername());
 
-        item.findViewById(R.id.big_event_list_item_link_btn).setOnClickListener(onClickListener);
+        item.findViewById(R.id.big_event_list_item_link_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UserController.getInstance().rewardUser(smallUser.getUid(), WinnerSpinnerAdapter.this.value, WinnerSpinnerAdapter.this.tag);
+            }
+        });
+
 
         return item;
     }

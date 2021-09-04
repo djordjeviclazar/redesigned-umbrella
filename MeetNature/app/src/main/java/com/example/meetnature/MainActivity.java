@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
              user.setGeoHash(userGeohash);
 
             if(user == null){
-                Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();
             }
             else {
                 Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();

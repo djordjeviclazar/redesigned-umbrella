@@ -34,6 +34,7 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
 import com.example.meetnature.MainActivity;
@@ -45,6 +46,7 @@ import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -140,6 +142,11 @@ public class HomeFragment extends Fragment {
             MainActivity.loginsClicked = -10;
             view.findViewById(R.id.home_logout_btn).callOnClick();
         }
+/*
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("Chess");
+        tags.add("Football");
+        tags.add("Basketball");*/
 
         //setup map:
         Context context = mainActivity.getApplicationContext();
@@ -200,7 +207,7 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupMarkerCallback(MapView mapViewArg){
-        Toast.makeText(getActivity(), "Marker callback", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "Marker callback", Toast.LENGTH_SHORT).show();
         if (myObserver == null){
             myObserver = new Observer<List<Event>>() {
                 @Override
