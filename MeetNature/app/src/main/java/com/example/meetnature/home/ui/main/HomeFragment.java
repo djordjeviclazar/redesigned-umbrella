@@ -270,7 +270,7 @@ public class HomeFragment extends Fragment {
 
     private void setupUserMarkersCallback(MapView mapViewArg){
         //Toast.makeText(getActivity(), "Marker callback", Toast.LENGTH_SHORT).show();
-        if (myObserver == null){
+        if (myUserObserver == null){
             myUserObserver = new Observer<List<User>>() {
                 @Override
                 public void onChanged(List<User> users) {
@@ -289,7 +289,7 @@ public class HomeFragment extends Fragment {
                             // set Image on marker:
                             String imageUrl = user.getImageUrl() == null ? user.getImageUrl() : taksiDoBaze.defaultImage;
 
-                            Picasso.get().load(imageUrl).into(new Target() {
+                            Picasso.get().load(imageUrl).resize(40, 40).into(new Target() {
                                 @Override
                                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                     //Toast.makeText(getActivity(), "Loaded bitmap", Toast.LENGTH_SHORT).show();
