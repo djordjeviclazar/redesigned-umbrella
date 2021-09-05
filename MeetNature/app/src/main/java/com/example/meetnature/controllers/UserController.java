@@ -116,6 +116,7 @@ public class UserController {
     }
 
     public void getUsersInRadius(GeoLocation center, double radius, OnSuccessListener callback){
+        /*
         context.get().addOnSuccessListener(dataSnapshot -> {
             for (DataSnapshot data : dataSnapshot.getChildren()){
                 User userData = data.getValue(User.class);
@@ -125,6 +126,7 @@ public class UserController {
                 }
             }
         });
+         */
         context.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {

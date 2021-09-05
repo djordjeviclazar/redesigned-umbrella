@@ -172,7 +172,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 public void onSuccess(Object o) {
                     User userData = (User)o;
                     //Toast.makeText(MainActivity.this, eventData.getUsername() + " is added to MutableLiveData", Toast.LENGTH_SHORT).show();
-                    List<User> previousUsers = nearUsers.getValue() == null ? new ArrayList<>() : nearUsers.getValue();
+                    if (nearUsers.getValue() == null){
+                        nearUsers.setValue(new ArrayList<>());
+                    }
+                    List<User> previousUsers = nearUsers.getValue();
                     previousUsers.add(userData);
                     nearUsers.postValue(previousUsers);
                 }

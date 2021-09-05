@@ -165,9 +165,11 @@ public class User implements Serializable {
         this.geoHash = geoHash;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
+
+    public boolean getIsActive() {return isActive;}
 
     public boolean isActive() {
         return isActive;

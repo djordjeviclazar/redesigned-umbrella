@@ -123,6 +123,7 @@ public class EventController {
     }
 
     public void getEventsInRadius(GeoLocation center, double radius, OnSuccessListener callback){
+        /*
         context.get().addOnSuccessListener(dataSnapshot -> {
             for (DataSnapshot data : dataSnapshot.getChildren()){
                 Event eventData = data.getValue(Event.class);
@@ -131,6 +132,7 @@ public class EventController {
                 }
             }
         });
+         */
         context.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
