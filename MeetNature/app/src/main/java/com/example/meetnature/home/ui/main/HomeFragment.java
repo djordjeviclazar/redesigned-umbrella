@@ -65,6 +65,7 @@ public class HomeFragment extends Fragment {
     private Observer<List<User>> myUserObserver;
     private HashMap<String, Event> addedEvents;
     private HashMap<String, User> addedUsers;
+    private HashMap<String, Marker> markers;
 
     final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
 
@@ -81,6 +82,7 @@ public class HomeFragment extends Fragment {
         myUserObserver = null;
         addedEvents = new HashMap<>();
         addedUsers = new HashMap<>();
+        markers = new HashMap<>();
 
         return inflater.inflate(R.layout.home_fragment, container, false);
     }
@@ -185,6 +187,8 @@ public class HomeFragment extends Fragment {
             MainActivity.nearUsers.removeObserver(myUserObserver);
         }
         addedUsers = null;
+
+        markers = null;
     }
 
     @SuppressLint("Missing permission")
@@ -285,11 +289,14 @@ public class HomeFragment extends Fragment {
                             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
                             marker.setId(user.getUid());
 
+                            markers.put(user.getUid(), marker);
+
+
 
                             // set Image on marker:
                             String imageUrl = user.getImageUrl() == null ? user.getImageUrl() : taksiDoBaze.defaultImage;
 
-                            Picasso.get().load(imageUrl).resize(40, 40).into(new Target() {
+                            Picasso.get().load(imageUrl).resize(100, 100).into(new Target() {
                                 @Override
                                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
                                     //Toast.makeText(getActivity(), "Loaded bitmap", Toast.LENGTH_SHORT).show();
@@ -311,6 +318,11 @@ public class HomeFragment extends Fragment {
 
                                 }
                             });
+                        }
+                        else {
+                            Marker oldPositionMarker = markers.get(user.getUid());
+                            oldPositionMarker.setPosition(new GeoPoint(user.getLat(), user.getLon()));
+                            mapView.invalidate();
                         }
                     }
                 }

@@ -3,6 +3,7 @@ package com.example.meetnature.controllers;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.data.models.Badges;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallEvent;
@@ -115,7 +116,7 @@ public class UserController {
         context.child(uid).child("badges").child(key).setValue(badge);
     }
 
-    public void getUsersInRadius(GeoLocation center, double radius, OnSuccessListener callback){
+    public void getUsersInRadius(GeoLocation center, double radius, MainActivity.UserInRangeCallback callback){
         /*
         context.get().addOnSuccessListener(dataSnapshot -> {
             for (DataSnapshot data : dataSnapshot.getChildren()){
@@ -132,7 +133,7 @@ public class UserController {
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User userData = snapshot.getValue(User.class);
                 if (isInRangeActive(userData, center, radius)) {
-                    callback.onSuccess(userData);
+                    callback.newUser(userData);
                 }
             }
 
@@ -140,7 +141,7 @@ public class UserController {
             public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 User userData = snapshot.getValue(User.class);
                 if (isInRangeActive(userData, center, radius)) {
-                    callback.onSuccess(userData);
+                    callback.updateUser(userData);
                 }
             }
 
@@ -165,7 +166,7 @@ public class UserController {
 
         boolean isInRange = GeoFireUtils.getDistanceBetween(center, new GeoLocation(otherUser.getLat(), otherUser.getLon())) <= radius;
         boolean isActive = otherUser.isActive();
-        boolean notCurrentUser = otherUser.getUid().equals(user.getUid());
+        boolean notCurrentUser = !otherUser.getUid().equals(user.getUid());
 
         // check if isActive is set before 15 mins:
         Date lastActive = otherUser.getLastActive();

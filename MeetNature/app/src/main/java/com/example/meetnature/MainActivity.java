@@ -167,19 +167,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 }
             });
 
-            UserController.getInstance().getUsersInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
-                @Override
-                public void onSuccess(Object o) {
-                    User userData = (User)o;
-                    //Toast.makeText(MainActivity.this, eventData.getUsername() + " is added to MutableLiveData", Toast.LENGTH_SHORT).show();
-                    if (nearUsers.getValue() == null){
-                        nearUsers.setValue(new ArrayList<>());
-                    }
-                    List<User> previousUsers = nearUsers.getValue();
-                    previousUsers.add(userData);
-                    nearUsers.postValue(previousUsers);
-                }
-            });
+            UserController.getInstance().getUsersInRadius(new GeoLocation(userLat, userLon), 500, new UserInRangeCallback());
         }
 
         /*
@@ -252,6 +240,42 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
             }
         });*/
+    }
+
+    public class UserInRangeCallback{
+        public void newUser(User newUser){
+            //Toast.makeText(MainActivity.this, eventData.getUsername() + " is added to MutableLiveData", Toast.LENGTH_SHORT).show();
+            if (nearUsers.getValue() == null){
+                nearUsers.setValue(new ArrayList<>());
+            }
+            List<User> previousUsers = nearUsers.getValue();
+            previousUsers.add(newUser);
+            nearUsers.postValue(previousUsers);
+        }
+
+        public void updateUser(User updatedUser){
+            //Toast.makeText(MainActivity.this, eventData.getUsername() + " is added to MutableLiveData", Toast.LENGTH_SHORT).show();
+            if (nearUsers.getValue() == null){
+                nearUsers.setValue(new ArrayList<>());
+            }
+            List<User> previousUsers = nearUsers.getValue();
+
+            // Update list:
+            boolean isInList = false;
+            Object[] prevArray = previousUsers.toArray();
+            for (int i = 0; i < previousUsers.size(); i++){
+                if (updatedUser.getUid().equals(((User)prevArray[i]).getUid())){
+                    previousUsers.set(i, updatedUser);
+                    isInList = true;
+                    break;
+                }
+            }
+            if (!isInList){
+                previousUsers.add(updatedUser);
+            }
+
+            nearUsers.postValue(previousUsers);
+        }
     }
 
     public class GetUserCallback implements OnSuccessListener<DataSnapshot>{
