@@ -106,20 +106,18 @@ public class EventController {
         UserController.getInstance().followEvent(event, callback);
     }
 
-    public ArrayList<Event> getSearchedEvents(String tag){
-        ArrayList<Event> result = new ArrayList<>();
+    public void getSearchedEvents(String tag, OnSuccessListener callback){
 
         context.get().addOnSuccessListener(dataSnapshot -> {
+            ArrayList<Event> result = new ArrayList<>();
             for (DataSnapshot data : dataSnapshot.getChildren()){
                 Event eventData = data.getValue(Event.class);
-
                 if (eventData.getTag().equals(tag)) {
                     result.add(eventData);
                 }
             }
+            callback.onSuccess(result);
         });
-
-        return result;
     }
 
     public void getEventsInRadius(GeoLocation center, double radius, OnSuccessListener callback){
