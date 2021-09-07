@@ -51,7 +51,7 @@ public class EventListFragment extends Fragment {
         BigEventViewAdapter adapter = new BigEventViewAdapter(getContext(), params);
 
         adapter.setOnClickListenerLinkEvent(new UserProfileFragment.OnClickListenerLinkEvent());
-        ((ListView) (view.findViewById(R.id.event_list_main_scroll_linear_layout))).setAdapter(adapter);
+        ((ListView) (view.findViewById(R.id.event_list_main_scroll_2))).setAdapter(adapter);
     }
 
     @Override
