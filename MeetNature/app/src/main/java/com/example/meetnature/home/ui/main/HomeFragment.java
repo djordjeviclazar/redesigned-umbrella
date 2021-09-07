@@ -31,10 +31,13 @@ import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.meetnature.MainActivity;
@@ -43,6 +46,7 @@ import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.addevent.AddEventFragment;
+import com.example.meetnature.home.ui.eventlist.EventListFragment;
 import com.example.meetnature.home.ui.otherprofile.OtherProfileFragment;
 import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
@@ -72,6 +76,9 @@ public class HomeFragment extends Fragment {
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
+
+    public String[] spinnerData = {"Chess", "Basketball", "Football"};
+    public String spinnerDataSelected;
 
     @Nullable
     @Override
@@ -105,6 +112,38 @@ public class HomeFragment extends Fragment {
         //NavController navController = NavHostFragment.findNavController(this);
         //NavHostFragment navHostFragment = (NavHostFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.home_fragment);
         //NavController navController = navHostFragment.getNavController();
+
+
+        Spinner spino = view.findViewById(R.id.home_fragment_spinner);
+
+        ArrayAdapter<String> ad = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerData);
+        spino.setAdapter(ad);
+        spino.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                spinnerDataSelected = (String) parent.getItemAtPosition(position);
+                //Log.v("tag", spinnerDataSelected);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                    //enable/disable btn search TODO
+            }
+        });
+
+        view.findViewById(R.id.homepage_homefragment_searchaction_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString("tag", spinnerDataSelected);
+                    mainFragmentManager.beginTransaction().replace(R.id.main_fragment_container, EventListFragment.class, bundle)
+                            .setReorderingAllowed(true)
+                            .addToBackStack(null)
+                            .commit();
+            }
+        });
 
         view.findViewById(R.id.homepage_homefragment_floatmap_btn).setOnClickListener(new View.OnClickListener() {
             @Override

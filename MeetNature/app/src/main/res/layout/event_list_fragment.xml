@@ -10,8 +10,8 @@
 
     <ScrollView
         android:id="@+id/event_list_main_scroll"
-        android:layout_width="375dp"
-        android:layout_height="592dp"
+        android:layout_width="295dp"
+        android:layout_height="176dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -19,8 +19,20 @@
         app:layout_constraintVertical_bias="0.074">
 
         <LinearLayout
+            android:id="@+id/event_list_main_scroll_linear_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+
+    <ListView
+        android:id="@+id/event_list_main_scroll_2"
+        android:layout_width="355dp"
+        android:layout_height="310dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.578"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.551" />
 </androidx.constraintlayout.widget.ConstraintLayout>
