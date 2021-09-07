@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ public class EventListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         tag = arguments.getString("tag");
+        //Log.v("tag:", tag);
     }
 
     @Override
@@ -49,7 +51,7 @@ public class EventListFragment extends Fragment {
         BigEventViewAdapter adapter = new BigEventViewAdapter(getContext(), params);
 
         adapter.setOnClickListenerLinkEvent(new UserProfileFragment.OnClickListenerLinkEvent());
-        ((ListView) (view.findViewById(R.id.event_list_main_scroll))).setAdapter(adapter);
+        ((ListView) (view.findViewById(R.id.event_list_main_scroll_linear_layout))).setAdapter(adapter);
     }
 
     @Override
