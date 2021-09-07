@@ -211,8 +211,12 @@ public class EventController {
         }
     }
 
-    public void finishEvent(String uid){
-        context.child(uid).child("finished").setValue(true);
+    public void finishEvent(String uid, OnSuccessListener onSuccessListener){
+        context.child(uid).child("finished").setValue(true).addOnSuccessListener(onSuccessListener);
+    }
+
+    public void startEvent(String uid, OnSuccessListener onSuccessListener) {
+        context.child(uid).child("started").setValue(true).addOnSuccessListener(onSuccessListener);
     }
 
     // callbacks:

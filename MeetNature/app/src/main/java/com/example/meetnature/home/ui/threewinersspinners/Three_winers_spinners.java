@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
@@ -74,7 +75,12 @@ public class Three_winers_spinners extends Fragment {
                 goldAdapter.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        EventController.getInstance().finishEvent(eventUid);
+                        EventController.getInstance().finishEvent(eventUid, new OnSuccessListener() {
+                            @Override
+                            public void onSuccess(Object o) {
+                                Toast.makeText(getActivity(), "Event is finished!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         //UserController.getInstance().rewardUser();
                     }
                 });

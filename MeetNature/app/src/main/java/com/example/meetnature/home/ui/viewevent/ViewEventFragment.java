@@ -142,19 +142,44 @@ public class ViewEventFragment extends Fragment {
 
                 Button action = (Button)view.findViewById(R.id.event_going_btn);
                 if (!event.getFinished()) {
-
-                    if (event.getOrganizer().getUid() == mainActivity.getUser().getUid()) {
-                        if (event.getTime().compareTo(new Date()) >= 0){
-                            action.setText("Finish event");
-                            action.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString("eventUid", eventUid);
-                                    mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, Three_winers_spinners.class, bundle)
-                                            .setReorderingAllowed(true).addToBackStack(null).commit();
-                                }
-                            });
+                    if (event.getOrganizer().getUid().equals(mainActivity.getUser().getUid())) {
+                        if (event.getTime().before(new Date())){
+                            if (event.getStarted()){
+                                action.setText("Finish event");
+                                action.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString("eventUid", eventUid);
+                                        mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, Three_winers_spinners.class, bundle)
+                                                .setReorderingAllowed(true).addToBackStack(null).commit();
+                                    }
+                                });
+                            }
+                            else {
+                                action.setText("Start event");
+                                action.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        EventController.getInstance().startEvent(eventUid, new OnSuccessListener() {
+                                            @Override
+                                            public void onSuccess(Object o) {
+                                                Toast.makeText(mainActivity, "You started event!", Toast.LENGTH_SHORT).show();
+                                                action.setText("Finish event");
+                                                action.setOnClickListener(new View.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(View v) {
+                                                        Bundle bundle = new Bundle();
+                                                        bundle.putString("eventUid", eventUid);
+                                                        mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, Three_winers_spinners.class, bundle)
+                                                                .setReorderingAllowed(true).addToBackStack(null).commit();
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
+                            }
                         }
                         else {
                             action.setEnabled(false);
@@ -162,21 +187,82 @@ public class ViewEventFragment extends Fragment {
                         }
                     }
                     else {
-                        if (event.getTime().compareTo(new Date()) >= 0){
+
+                        boolean isAttendant = false;
+                        boolean isFollower = false;
+                        for (SmallUser attendant : event.getAttendants().values()){
+                            if (attendant.getUid().equals(mainActivity.getUser().getUid())){
+                                isAttendant = true;
+                                break;
+                            }
+                        }
+                        for (SmallUser follower : event.getFollowers().values()){
+                            if (follower.getUid().equals(mainActivity.getUser().getUid())){
+                               isFollower = true;
+                               break;
+                            }
+                        }
+
+                        // Set butto
+                        if (!isFollower && !isAttendant) {
                             if (event.getFollowersCount() >= event.getCapacity()) {
                                 action.setEnabled(false);
                                 action.setText("NO MORE PLACE!");
+                                Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                boolean isAttendant = false;
-                                for (SmallUser attendant : event.getAttendants().values()){
-                                    if (attendant.getUid() == mainActivity.getUser().getUid()){
-                                        isAttendant = true;
-                                        break;
-                                    }
-                                }
-                                if (isAttendant) {
+                                if (event.getTime().before(new Date())){
                                     action.setText("Attend");
+                                    action.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            double currentLat = mainActivity.getUser().getLat();
+                                            double currentLon = mainActivity.getUser().getLon();
+                                            double distance = GeoFireUtils.getDistanceBetween(new GeoLocation(currentLat, currentLon), new GeoLocation(event.getLat(), event.getLon()));
+
+                                            action.setOnClickListener(new View.OnClickListener() {
+                                                @Override
+                                                public void onClick(View v) {
+                                                    EventController.getInstance().followEvent(event, mainActivity.getUser(), new OnSuccessListener() {
+                                                        @Override
+                                                        public void onSuccess(Object o) {
+                                                            action.setEnabled(false);
+                                                            Toast.makeText(mainActivity, "You are registered!", Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                                else {
+                                    action.setText("Follow");
+                                    action.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            if (event.getFollowersCount() >= event.getCapacity()) {
+                                                Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
+                                            } else {
+                                                EventController.getInstance().followEvent(event, UserController.getInstance().getCurrentUser(), new OnSuccessListener() {
+                                                    @Override
+                                                    public void onSuccess(Object o) {
+                                                        Toast.makeText(mainActivity, "Your wish to participate in event is forwarded to server. Good luck!", Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                        else {
+                            if (event.getTime().before(new Date())){
+                                if (isAttendant){
+                                    action.setEnabled(false);
+                                    action.setVisibility(View.GONE);
+                                }
+                                else {
+                                    action.setText("Attend!");
                                     action.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -202,35 +288,17 @@ public class ViewEventFragment extends Fragment {
                                         }
                                     });
                                 }
-                                else {
-                                    action.setEnabled(false);
-                                    action.setVisibility(View.GONE);
-                                    Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
-                                }
                             }
-                        }
-                        else {
-                            action.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    if (event.getFollowersCount() >= event.getCapacity()) {
-                                        Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
-                                    } else {
-                                        EventController.getInstance().followEvent(event, UserController.getInstance().getCurrentUser(), new OnSuccessListener() {
-                                            @Override
-                                            public void onSuccess(Object o) {
-                                                Toast.makeText(mainActivity, "Your wish to participate in event is forwarded to server. Good luck!", Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
-                                    }
-                                }
-                            });
+                            else{
+                                action.setVisibility(View.GONE);
+                            }
                         }
                     }
                 }
                 else {
-                    action.setEnabled(false);
-                    action.setVisibility(View.GONE);
+                    action.setEnabled(true);
+                    action.setText("Ranikng List");
+                    action.setVisibility(View.VISIBLE);
                 }
             }
         });
