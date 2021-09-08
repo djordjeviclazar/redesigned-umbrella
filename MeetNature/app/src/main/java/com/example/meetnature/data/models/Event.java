@@ -23,6 +23,7 @@ public class Event {
     private Map<String, SmallUser> attendants;
     private Map<String, SmallUser> followers;
     private SmallUser organizer;
+    private SmallUser winner;
     private double lat;
     private double lon;
     private String geoHash;
@@ -189,5 +190,13 @@ public class Event {
 
     public  void setGeoHash(String geoHash){
         this.geoHash = geoHash;
+    }
+
+    public void setWinner(SmallUser winner) {
+        this.winner = winner;
+    }
+
+    public SmallUser getWinner() {
+        return winner;
     }
 }

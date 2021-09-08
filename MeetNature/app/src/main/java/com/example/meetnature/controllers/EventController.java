@@ -209,6 +209,10 @@ public class EventController {
         }
     }
 
+    public void setWinner(String eventUid, SmallUser winner, OnSuccessListener onSuccessListener){
+        context.child(eventUid).child("winner").setValue(winner).addOnSuccessListener(onSuccessListener);
+    }
+
     public void finishEvent(String uid, OnSuccessListener onSuccessListener){
         context.child(uid).child("finished").setValue(true).addOnSuccessListener(onSuccessListener);
     }
