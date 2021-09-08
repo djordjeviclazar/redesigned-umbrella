@@ -77,6 +77,14 @@ public class UserController {
         });
     }
 
+    public void editUser(User newUser, OnSuccessListener callback) {
+        context.child(newUser.getUid()).child("imageUrl").setValue(newUser.getImageUrl());
+        context.child(newUser.getUid()).child("info").setValue(newUser.getInfo());
+        context.child(newUser.getUid()).child("phoneNumber").setValue(newUser.getPhoneNumber());
+
+        callback.onSuccess(newUser);
+    }
+
     public void addNewUser(User user, OnSuccessListener callback){
         context.child(user.getUid()).setValue(user).addOnSuccessListener(callback);
     }

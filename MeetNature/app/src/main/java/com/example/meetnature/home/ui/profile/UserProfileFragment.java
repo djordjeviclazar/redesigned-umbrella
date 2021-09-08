@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
+import com.example.meetnature.home.ui.useredit.EditUserProfile;
 import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
 
@@ -71,6 +73,17 @@ public class UserProfileFragment extends Fragment {
         View userProfileImage = view.findViewById(R.id.user_profile_img);
         ListView badgesListLayout = view.findViewById(R.id.badges_list_layout);
         ListView eventsListLayout = view.findViewById(R.id.events_list_layout);
+        Button editUserBtn = view.findViewById(R.id.edit_user_btn);
+
+        editUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, EditUserProfile.class, null)
+                        .setReorderingAllowed(true)
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         User user = mainActivity.getUser();
         if (user.getImageUrl().equals("")){
