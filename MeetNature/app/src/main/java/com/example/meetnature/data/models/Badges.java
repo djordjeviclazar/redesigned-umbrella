@@ -7,6 +7,7 @@ public class Badges implements Serializable {
     private String tag;
     private int level;
     private int value;
+    private String eventUid;
 
     public Badges() {
 
@@ -41,4 +42,11 @@ public class Badges implements Serializable {
         this.value = value;
     }
 
+    public void setEventUid(String eventUid) {
+        this.eventUid = eventUid;
+    }
+
+    public String getEventUid() {
+        return eventUid;
+    }
 }

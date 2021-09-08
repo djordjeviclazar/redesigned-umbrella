@@ -22,6 +22,7 @@ import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.data.models.User;
+import com.example.meetnature.home.ui.eventinfo.EventInfoFragment;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 
@@ -33,6 +34,9 @@ public class Three_winers_spinners extends Fragment {
     private String eventUid;
     private ArrayList<SmallUser> attendats;
 
+    private MainActivity mainActivity;
+    private Bundle arguments;
+
     public static Three_winers_spinners newInstance() {
         return new Three_winers_spinners();
     }
@@ -41,9 +45,11 @@ public class Three_winers_spinners extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle arguments = getArguments();
+        arguments = getArguments();
         eventUid = arguments.getString("eventUid");
         attendats = new ArrayList<>();
+
+        mainActivity = (MainActivity) getActivity();
     }
 
     @Override
@@ -71,17 +77,20 @@ public class Three_winers_spinners extends Fragment {
                 Event event = dataSnapshot.getValue(Event.class);
                 attendats.addAll(event.getAttendants().values());
 
-                WinnerSpinnerAdapter goldAdapter = new WinnerSpinnerAdapter(getContext(), attendats, 10, event.getTag());
-                goldAdapter.setOnClickListener(new View.OnClickListener() {
+                WinnerSpinnerAdapter goldAdapter = new WinnerSpinnerAdapter(getContext(), attendats, 10, event.getTag(), eventUid);
+                goldAdapter.setOnSuccessListener(new OnSuccessListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onSuccess(Object o) {
                         EventController.getInstance().finishEvent(eventUid, new OnSuccessListener() {
                             @Override
                             public void onSuccess(Object o) {
                                 Toast.makeText(getActivity(), "Event is finished!", Toast.LENGTH_SHORT).show();
+                                mainActivity.getMainFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.main_fragment_container, EventInfoFragment.class, arguments)
+                                        .setReorderingAllowed(true).addToBackStack(null).commit();
                             }
                         });
-                        //UserController.getInstance().rewardUser();
                     }
                 });
                 eventsListLayout.setAdapter(goldAdapter);

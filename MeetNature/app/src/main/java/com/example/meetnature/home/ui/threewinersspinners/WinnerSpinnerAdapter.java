@@ -15,11 +15,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.meetnature.R;
+import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,16 +32,18 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
 
     private Context mainContext;
     private List<SmallUser> attendantsList = new ArrayList<>();
-    private View.OnClickListener onClickListener;
+    private OnSuccessListener onSuccessListener;
     private int value;
     private String tag;
+    private String eventUid;
 
-    public WinnerSpinnerAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallUser> list, int value, String tag) {
+    public WinnerSpinnerAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallUser> list, int value, String tag, String eventUid) {
         super(context, 0 , list);
         mainContext = context;
         attendantsList = list;
         this.value = value;
         this.tag = tag;
+        this.eventUid = eventUid;
     }
 
     @NonNull
@@ -66,7 +70,17 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
         item.findViewById(R.id.spinner_user_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                UserController.getInstance().rewardUser(smallUser.getUid(), WinnerSpinnerAdapter.this.value, WinnerSpinnerAdapter.this.tag);
+                UserController.getInstance()
+                        .rewardUser(smallUser.getUid(),
+                                WinnerSpinnerAdapter.this.value,
+                                WinnerSpinnerAdapter.this.tag,
+                                eventUid,
+                                new OnSuccessListener() {
+                                    @Override
+                                    public void onSuccess(Object o) {
+                                        EventController.getInstance().setWinner(eventUid, smallUser, onSuccessListener);
+                                    }
+                                });
             }
         });
 
@@ -74,7 +88,7 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
         return item;
     }
 
-    public void setOnClickListener(View.OnClickListener onClickListenerLinkEvent) {
-        this.onClickListener = onClickListenerLinkEvent;
+    public void setOnSuccessListener(OnSuccessListener listener) {
+        this.onSuccessListener = listener;
     }
 }

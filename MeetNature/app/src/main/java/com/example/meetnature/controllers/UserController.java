@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.example.meetnature.helpers.*;
+import com.google.firebase.database.ServerValue;
 import com.google.type.DateTime;
 
 import java.time.Instant;
@@ -106,14 +107,17 @@ public class UserController {
         context.child(user.getUid()).child("followingEvents").child(event.getUId()).setValue(smallEvent).addOnSuccessListener(callback);
     }
 
-    public void rewardUser(String uid, int value, String tag) {
+    public void rewardUser(String uid, int value, String tag, String eventUid, OnSuccessListener finishEvent) {
         Badges badge = new Badges();
         badge.setLevel(1);
         badge.setTag(tag);
         badge.setValue(value);
+        badge.setEventUid(eventUid);
+
+        context.child(uid).child("score").setValue(ServerValue.increment(value));
 
         String key = context.child(uid).child("badges").push().getKey();
-        context.child(uid).child("badges").child(key).setValue(badge);
+        context.child(uid).child("badges").child(key).setValue(badge).addOnSuccessListener(finishEvent);
     }
 
     public void getUsersInRadius(GeoLocation center, double radius, MainActivity.UserInRangeCallback callback){
