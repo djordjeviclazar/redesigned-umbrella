@@ -50,6 +50,7 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
 
         SmallUser smallUser = attendantsList.get(position);
         ImageButton img = (ImageButton)item.findViewById(R.id.spinner_user_list_item_image);
+        // Must add start path to Storage, and check if image is empty string:
         Picasso.get().load(smallUser.getImageUrl()).resize(100, 100).into(img);
 
         ((TextView)item.findViewById(R.id.spinner_user_list_item_username_lbl)).setText(smallUser.getUsername());

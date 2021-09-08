@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
 import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.data.models.Event;
@@ -26,6 +27,7 @@ public class EventListFragment extends Fragment {
 
     private EventListViewModel mViewModel;
     private String tag;
+    private MainActivity mainActivity;
 
     public static EventListFragment newInstance() {
         return new EventListFragment();
@@ -36,7 +38,9 @@ public class EventListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         Bundle arguments = getArguments();
         tag = arguments.getString("tag");
-        Log.v("tag:", tag);
+
+        mainActivity = (MainActivity)getActivity();
+        //Log.v("tag:", tag);
     }
 
     @Override
@@ -53,7 +57,7 @@ public class EventListFragment extends Fragment {
              public void onSuccess(Object o) {
                  ArrayList<Event> params = (ArrayList<Event>)o;
                  BigEventViewAdapter adapter = new BigEventViewAdapter(getContext(), params);
-                 adapter.setOnClickListenerLinkEvent(new UserProfileFragment.OnClickListenerLinkEvent());
+                 adapter.setOnClickListenerLinkEvent(new UserProfileFragment.OnClickListenerLinkEvent(mainActivity));
                  ((ListView) (view.findViewById(R.id.event_list_main_scroll_2))).setAdapter(adapter);
              }
          });

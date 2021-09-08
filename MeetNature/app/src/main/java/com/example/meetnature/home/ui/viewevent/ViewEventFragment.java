@@ -190,28 +190,35 @@ public class ViewEventFragment extends Fragment {
 
                         boolean isAttendant = false;
                         boolean isFollower = false;
-                        for (SmallUser attendant : event.getAttendants().values()){
-                            if (attendant.getUid().equals(mainActivity.getUser().getUid())){
-                                isAttendant = true;
-                                break;
+                        int followersCount = 0, attendantsCount = 0;
+                        if (event.getAttendants() != null) {
+                            attendantsCount = event.getAttendants().size();
+                            for (SmallUser attendant : event.getAttendants().values()) {
+                                if (attendant.getUid().equals(mainActivity.getUser().getUid())) {
+                                    isAttendant = true;
+                                    break;
+                                }
                             }
                         }
-                        for (SmallUser follower : event.getFollowers().values()){
-                            if (follower.getUid().equals(mainActivity.getUser().getUid())){
-                               isFollower = true;
-                               break;
+                        if (event.getFollowers() != null) {
+                            followersCount = event.getFollowers().size();
+                            for (SmallUser follower : event.getFollowers().values()) {
+                                if (follower.getUid().equals(mainActivity.getUser().getUid())) {
+                                    isFollower = true;
+                                    break;
+                                }
                             }
                         }
 
-                        // Set butto
+                        // Set button
                         if (!isFollower && !isAttendant) {
-                            if (event.getFollowersCount() >= event.getCapacity()) {
+                            if (followersCount >= event.getCapacity()) {
                                 action.setEnabled(false);
                                 action.setText("NO MORE PLACE!");
                                 Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
                             }
                             else {
-                                if (event.getTime().before(new Date())){
+                                if (event.getTime().before(new Date()) && event.getStarted()){
                                     action.setText("Attend");
                                     action.setOnClickListener(new View.OnClickListener() {
                                         @Override
@@ -236,11 +243,12 @@ public class ViewEventFragment extends Fragment {
                                     });
                                 }
                                 else {
+                                    final int followersCountConst = followersCount;
                                     action.setText("Follow");
                                     action.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            if (event.getFollowersCount() >= event.getCapacity()) {
+                                            if (followersCountConst >= event.getCapacity()) {
                                                 Toast.makeText(mainActivity, "Sorry, but there is no more place for this event.", Toast.LENGTH_SHORT).show();
                                             } else {
                                                 EventController.getInstance().followEvent(event, UserController.getInstance().getCurrentUser(), new OnSuccessListener() {
@@ -256,7 +264,7 @@ public class ViewEventFragment extends Fragment {
                             }
                         }
                         else {
-                            if (event.getTime().before(new Date())){
+                            if (event.getTime().before(new Date()) && event.getStarted()){
                                 if (isAttendant){
                                     action.setEnabled(false);
                                     action.setVisibility(View.GONE);

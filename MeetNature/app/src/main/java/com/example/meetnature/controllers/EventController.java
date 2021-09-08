@@ -93,7 +93,7 @@ public class EventController {
         smallUser.setUid(user.getUid());
         smallUser.setUsername(user.getUsername());
         smallUser.setImageUrl(user.getImageUrl());
-        context.child(event.getUId()).child(user.getUid()).setValue(smallUser);
+        context.child(event.getUId()).child("followers").child(user.getUid()).setValue(smallUser);
         UserController.getInstance().followEvent(event, callback);
     }
 
@@ -102,7 +102,7 @@ public class EventController {
         smallUser.setUid(user.getUid());
         smallUser.setUsername(user.getUsername());
         smallUser.setImageUrl(user.getImageUrl());
-        context.child(event.getUId()).child("attendants").setValue(smallUser);
+        context.child(event.getUId()).child("attendants").child(user.getUid()).setValue(smallUser);
         UserController.getInstance().followEvent(event, callback);
     }
 

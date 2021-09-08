@@ -92,7 +92,7 @@ public class UserProfileFragment extends Fragment {
             ArrayList<SmallEvent> param = new ArrayList<>();
             param.addAll(smallEvents);
             EventViewAdapter adapter = new EventViewAdapter(getContext(), param);
-            adapter.setOnClickListenerLinkEvent(new OnClickListenerLinkEvent());
+            adapter.setOnClickListenerLinkEvent(new OnClickListenerLinkEvent(mainActivity));
             eventsListLayout.setAdapter(adapter);
         }
     }
@@ -100,6 +100,11 @@ public class UserProfileFragment extends Fragment {
     public static class OnClickListenerLinkEvent implements View.OnClickListener{
 
         private String eventUid;
+        private MainActivity mainActivity;
+
+        public OnClickListenerLinkEvent(MainActivity mainActivity){
+            this.mainActivity = mainActivity;
+        }
 
         public void setEventUid(String eventUid) {
             this.eventUid = eventUid;
@@ -109,7 +114,9 @@ public class UserProfileFragment extends Fragment {
         public void onClick(View v) {
             Bundle bundle = new Bundle();
             bundle.putString("eventUid", eventUid);
-            mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, ViewEventFragment.class, bundle)
+            OnClickListenerLinkEvent.this.mainActivity.getMainFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.main_fragment_container, ViewEventFragment.class, bundle)
                     .setReorderingAllowed(true).addToBackStack(null).commit();
         }
     }
