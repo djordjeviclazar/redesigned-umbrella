@@ -26,6 +26,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <!-- SERVISI -->
+        <service android:name="com.example.meetnature.services.LocationService"></service>
 
         <!-- NEBITNO -->
         <activity

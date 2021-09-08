@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.Manifest;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -31,6 +32,7 @@ import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.home.ui.main.HomeFragment;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
+import com.example.meetnature.services.LocationService;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQueryDataEventListener;
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
     FragmentManager mainFragmentManager;
     LocationManager locationManager;
 
+    boolean backgroundWorkerActive;
+    Intent intentForLocationService;
+    ComponentName locationService;
+
     public static MutableLiveData<List<Event>> nearEvents = new MutableLiveData<>();
     public static MutableLiveData<List<User>> nearUsers = new MutableLiveData<>();
     HashMap<String, Event> inMemoryEvents;
@@ -69,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
 
         loginsClicked = -10;
         mainFragmentManager = getSupportFragmentManager();
+        backgroundWorkerActive = true;
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -295,6 +302,10 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 //Toast.makeText(MainActivity.this,"NEeeeeeeeeeeeeee user null", Toast.LENGTH_SHORT).show();
             }
             else {
+
+                intentForLocationService = new Intent(MainActivity.this, LocationService.class);
+                locationService = startService(intentForLocationService);
+
                 Toast.makeText(MainActivity.this, user.getUsername(), Toast.LENGTH_SHORT).show();
                 Toast.makeText(MainActivity.this, "Uspesno", Toast.LENGTH_SHORT).show();
 
