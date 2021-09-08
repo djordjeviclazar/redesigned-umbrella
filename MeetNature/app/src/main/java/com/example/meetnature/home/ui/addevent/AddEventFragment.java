@@ -20,8 +20,11 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -71,6 +74,8 @@ public class AddEventFragment extends Fragment {
 
     private final static int TAKE_PICTURE = 1;
     private final static int PERMISSION_ACCESS_FINE_LOCATION = 1;
+    public String[] spinnerData = {"Chess", "Basketball", "Football"};
+    public String spinnerDataSelected;
 
     public static AddEventFragment newInstance() {
         return new AddEventFragment();
@@ -110,8 +115,23 @@ public class AddEventFragment extends Fragment {
 
         EditText descTxb = (EditText)view.findViewById(R.id.add_event_description_tbx);
         EditText nameTxb = (EditText)view.findViewById(R.id.add_event_name_tbx);
-        EditText tagTxb = (EditText)view.findViewById(R.id.add_event_tags_tbx);
+        Spinner tagSpn = (Spinner)view.findViewById(R.id.add_event_fragment_spinner);
         EditText capacityTxb = (EditText)view.findViewById(R.id.add_event_fragment_capacity);
+
+        ArrayAdapter<String> ad = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, spinnerData);
+        tagSpn.setAdapter(ad);
+        tagSpn.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+                spinnerDataSelected = (String) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                //enable/disable btn search TODO
+            }
+        });
 
         dateTime.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -143,7 +163,7 @@ public class AddEventFragment extends Fragment {
                 event.setEventName(nameTxb.getText().toString());
                 List<String> tags = new ArrayList<>();
                 //tags.add(tagTxb.getText().toString());
-                event.setTag(tagTxb.getText().toString());
+                event.setTag(spinnerDataSelected);
                 event.setCapacity(20);
                 event.setFinished(false);
                 event.setImageUrl(UserController.getInstance().getCurrentUser().getUsername() + "_" + event.getEventName() + new Date().toString() + ".jpg");
