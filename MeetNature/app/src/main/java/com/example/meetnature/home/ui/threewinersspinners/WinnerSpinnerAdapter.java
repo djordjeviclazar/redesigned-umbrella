@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -17,6 +18,7 @@ import com.example.meetnature.R;
 import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.SmallUser;
+import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
 import com.squareup.picasso.Picasso;
 
@@ -51,11 +53,17 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
         SmallUser smallUser = attendantsList.get(position);
         ImageButton img = (ImageButton)item.findViewById(R.id.spinner_user_list_item_image);
         // Must add start path to Storage, and check if image is empty string:
-        Picasso.get().load(smallUser.getImageUrl()).resize(100, 100).into(img);
+        if (smallUser.getImageUrl().equals("")){
+            Picasso.get().load(taksiDoBaze.defaultImage).resize(200, 200).into((ImageView)img);
+        }
+        else {
+            Picasso.get().load(smallUser.getImageUrl()).resize(200, 200).into((ImageView)img);
+        }
+        //Picasso.get().load(smallUser.getImageUrl()).resize(100, 100).into(img);
 
         ((TextView)item.findViewById(R.id.spinner_user_list_item_username_lbl)).setText(smallUser.getUsername());
 
-        item.findViewById(R.id.big_event_list_item_link_btn).setOnClickListener(new View.OnClickListener() {
+        item.findViewById(R.id.spinner_user_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 UserController.getInstance().rewardUser(smallUser.getUid(), WinnerSpinnerAdapter.this.value, WinnerSpinnerAdapter.this.tag);

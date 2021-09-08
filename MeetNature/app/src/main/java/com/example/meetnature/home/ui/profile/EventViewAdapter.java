@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.LayoutRes;
@@ -20,6 +21,7 @@ import java.util.List;
 
 import com.example.meetnature.R;
 import com.example.meetnature.data.models.User;
+import com.example.meetnature.helpers.taksiDoBaze;
 import com.squareup.picasso.Picasso;
 
 public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
@@ -44,7 +46,13 @@ public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
 
         SmallEvent smallEvent = eventList.get(position);
         ImageButton img = (ImageButton)item.findViewById(R.id.simple_event_list_item_image);
-        Picasso.get().load(smallEvent.getImageUrl()).resize(100, 100).into(img);
+        if (smallEvent.getImageUrl().equals("")){
+            Picasso.get().load(taksiDoBaze.defaultImage).resize(200, 200).into((ImageView)img);
+        }
+        else {
+            Picasso.get().load(smallEvent.getImageUrl()).resize(200, 200).into((ImageView)img);
+        }
+        //Picasso.get().load(smallEvent.getImageUrl()).resize(100, 100).into(img);
 
         ((TextView)item.findViewById(R.id.simple_event_list_item_event_name_lbl)).setText(smallEvent.getEventName());
         ((TextView)item.findViewById(R.id.simple_event_list_item_tag_lbl)).setText(smallEvent.getTag());
