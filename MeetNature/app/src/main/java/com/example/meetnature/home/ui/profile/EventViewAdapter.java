@@ -22,6 +22,7 @@ import java.util.List;
 import com.example.meetnature.R;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.helpers.taksiDoBaze;
+import com.example.meetnature.home.ui.otherprofile.OtherProfileFragment;
 import com.squareup.picasso.Picasso;
 
 public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
@@ -29,6 +30,7 @@ public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
     private Context mainContext;
     private List<SmallEvent> eventList = new ArrayList<>();
     private UserProfileFragment.OnClickListenerLinkEvent onClickListenerLinkEvent;
+    private OtherProfileFragment.OnClickListenerLinkEvent otherOnClickListenerLinkEvent;
 
     public EventViewAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallEvent> list) {
         super(context, 0 , list);
@@ -57,13 +59,23 @@ public class EventViewAdapter extends ArrayAdapter<SmallEvent> {
         ((TextView)item.findViewById(R.id.simple_event_list_item_event_name_lbl)).setText(smallEvent.getEventName());
         ((TextView)item.findViewById(R.id.simple_event_list_item_tag_lbl)).setText(smallEvent.getTag());
 
-        onClickListenerLinkEvent.setEventUid(smallEvent.getUId());
-        item.findViewById(R.id.simple_event_list_item_link_btn).setOnClickListener(onClickListenerLinkEvent);
+        if(onClickListenerLinkEvent != null) {
+            onClickListenerLinkEvent.setEventUid(smallEvent.getUId());
+            item.findViewById(R.id.simple_event_list_item_link_btn).setOnClickListener(onClickListenerLinkEvent);
+        }
+        if (otherOnClickListenerLinkEvent != null) {
+            otherOnClickListenerLinkEvent.setEventUid(smallEvent.getUId());
+            item.findViewById(R.id.simple_event_list_item_link_btn).setOnClickListener(otherOnClickListenerLinkEvent);
+        }
 
         return item;
     }
 
     public void setOnClickListenerLinkEvent(UserProfileFragment.OnClickListenerLinkEvent onClickListenerLinkEvent) {
         this.onClickListenerLinkEvent = onClickListenerLinkEvent;
+    }
+
+    public void setOnClickListenerLinkEvent(OtherProfileFragment.OnClickListenerLinkEvent onClickListenerLinkEvent) {
+        this.otherOnClickListenerLinkEvent = onClickListenerLinkEvent;
     }
 }

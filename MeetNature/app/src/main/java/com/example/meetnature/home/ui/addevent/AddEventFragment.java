@@ -164,7 +164,7 @@ public class AddEventFragment extends Fragment {
                 List<String> tags = new ArrayList<>();
                 //tags.add(tagTxb.getText().toString());
                 event.setTag(spinnerDataSelected);
-                event.setCapacity(20);
+                event.setCapacity(Integer.parseInt(capacityTxb.getText().toString()));
                 event.setFinished(false);
                 event.setImageUrl(UserController.getInstance().getCurrentUser().getUsername() + "_" + event.getEventName() + new Date().toString() + ".jpg");
                 event.setLon(mainActivity.getUser().getLon());

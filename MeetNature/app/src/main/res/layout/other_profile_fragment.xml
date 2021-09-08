@@ -47,7 +47,7 @@
             app:layout_constraintVertical_bias="0.575" />
 
         <LinearLayout
-            android:id="@+id/other_events_list_layout"
+            android:id="@+id/other_badges_list_layout"
             android:layout_width="220dp"
             android:layout_height="192dp"
             android:orientation="vertical"
@@ -73,19 +73,6 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:id="@+id/other_badges_list_layout"
-        android:layout_width="394dp"
-        android:layout_height="203dp"
-        android:background="#5BFFFFFF"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.592" />
-
     <Button
         android:id="@+id/other_follow_btn"
         android:layout_width="wrap_content"
@@ -96,6 +83,18 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.756" />
+        app:layout_constraintVertical_bias="0.898" />
+
+    <ListView
+        android:id="@+id/other_events_list_layout"
+        android:layout_width="378dp"
+        android:layout_height="187dp"
+        android:background="#85DCDCDC"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.721" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
