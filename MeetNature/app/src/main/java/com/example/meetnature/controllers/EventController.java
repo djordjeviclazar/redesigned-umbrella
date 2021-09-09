@@ -102,6 +102,7 @@ public class EventController {
         smallUser.setUid(user.getUid());
         smallUser.setUsername(user.getUsername());
         smallUser.setImageUrl(user.getImageUrl());
+        smallUser.setScore(user.getScore());
         context.child(event.getUId()).child("attendants").child(user.getUid()).setValue(smallUser);
         UserController.getInstance().followEvent(event, callback);
     }

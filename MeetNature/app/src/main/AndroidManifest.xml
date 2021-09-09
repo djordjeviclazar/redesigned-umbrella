@@ -28,7 +28,11 @@
         </activity>
         
         <!-- SERVISI -->
-        <service android:name="com.example.meetnature.services.LocationService"></service>
+        <service android:name="com.example.meetnature.services.LocationService"
+            android:enabled="true"
+            android:exported="false">
+
+        </service>
 
         <!-- NEBITNO -->
         <activity

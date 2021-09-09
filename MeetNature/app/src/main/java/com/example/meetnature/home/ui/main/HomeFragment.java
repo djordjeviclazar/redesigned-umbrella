@@ -48,6 +48,8 @@ import com.example.meetnature.helpers.taksiDoBaze;
 import com.example.meetnature.home.ui.addevent.AddEventFragment;
 import com.example.meetnature.home.ui.eventlist.EventListFragment;
 import com.example.meetnature.home.ui.otherprofile.OtherProfileFragment;
+import com.example.meetnature.home.ui.profile.UserProfileFragment;
+import com.example.meetnature.home.ui.ranking.RankingFragment;
 import com.example.meetnature.home.ui.viewevent.ViewEventFragment;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -180,7 +182,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        
+
 
         //Toast.makeText(mainActivity, "Loginsclicked = " + MainActivity.loginsClicked, Toast.LENGTH_SHORT).show();
         if (MainActivity.loginsClicked > 0)

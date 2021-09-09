@@ -51,7 +51,7 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View item = convertView;
         if (item == null){
-            item = LayoutInflater.from(mainContext).inflate(R.layout.spinner_user_item, parent, false);
+            item = LayoutInflater.from(mainContext).inflate(R.layout.ranking_user_item, parent, false);
         }
 
         SmallUser smallUser = attendantsList.get(position);

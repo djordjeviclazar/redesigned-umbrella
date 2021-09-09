@@ -10,6 +10,7 @@ public class SmallUser implements Serializable {
     private double lat;
     private double lon;
     private String geoHash;
+    private int score;
 
     public SmallUser() {
 
@@ -66,4 +67,11 @@ public class SmallUser implements Serializable {
         this.geoHash = geoHash;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 }

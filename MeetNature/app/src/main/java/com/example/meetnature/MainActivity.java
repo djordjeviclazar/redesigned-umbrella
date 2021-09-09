@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
@@ -32,6 +33,7 @@ import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.home.ui.main.HomeFragment;
 import com.example.meetnature.home.ui.profile.UserProfileFragment;
+import com.example.meetnature.home.ui.ranking.RankingFragment;
 import com.example.meetnature.services.LocationService;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
@@ -143,6 +145,19 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             recreate();
         }
 
+        if (id == R.id.home_menu_btn){
+            mainFragmentManager.beginTransaction().replace(R.id.main_fragment_container, HomeFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        }
+
+        if (id == R.id.home_menu_ranking_btn){
+            mainFragmentManager.beginTransaction().replace(R.id.main_fragment_container, RankingFragment.class, null)
+                    .setReorderingAllowed(true)
+                    .addToBackStack(null)
+                    .commit();
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -160,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
             user.setLat(userLat);
             user.setGeoHash(userGeohash);
 
-            UserController.getInstance().updateCurrentUserLocation(userLat, userLon);
+            //UserController.getInstance().updateCurrentUserLocation(userLat, userLon);
 
             EventController.getInstance().getEventsInRadius(new GeoLocation(userLat, userLon), 500, new OnSuccessListener() {
                 @Override
@@ -313,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements LocationListener 
                 findViewById(R.id.main_activity_events).setVisibility(View.VISIBLE);
                 findViewById(R.id.main_activity_user_image_btn).setVisibility(View.VISIBLE);
                 findViewById(R.id.main_activity_username).setVisibility(View.VISIBLE);
+                ((TextView)findViewById(R.id.main_activity_username)).setText(user.getUsername());
 
                 findViewById(R.id.main_activity_user_image_btn).setOnClickListener(new View.OnClickListener() {
                     @Override

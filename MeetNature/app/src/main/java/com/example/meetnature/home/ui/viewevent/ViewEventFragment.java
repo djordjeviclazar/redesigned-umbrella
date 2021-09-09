@@ -30,6 +30,7 @@ import com.example.meetnature.controllers.UserController;
 import com.example.meetnature.data.models.Event;
 import com.example.meetnature.data.models.SmallUser;
 import com.example.meetnature.data.models.User;
+import com.example.meetnature.home.ui.eventinfo.EventInfoFragment;
 import com.example.meetnature.home.ui.threewinersspinners.Three_winers_spinners;
 import com.firebase.geofire.GeoFireUtils;
 import com.firebase.geofire.GeoLocation;
@@ -55,6 +56,7 @@ public class ViewEventFragment extends Fragment {
     private MapView mapView;
     private IMapController mapController;
     private String eventUid;
+    private Bundle arguments;
 
     public static ViewEventFragment newInstance() {
         return new ViewEventFragment();
@@ -64,7 +66,7 @@ public class ViewEventFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle arguments = getArguments();
+        arguments = getArguments();
         eventUid = arguments.getString("eventUid");
 
         mViewModel = new ViewModelProvider(getActivity()).get(ViewEventViewModel.class);
@@ -140,6 +142,30 @@ public class ViewEventFragment extends Fragment {
                     }
                 });
 
+                // calculate tournament value, and check if user is attendant or follower
+                boolean isAttendant = false;
+                boolean isFollower = false;
+
+                int followersCount = 0, attendantsCount = 0;
+                if (event.getAttendants() != null) {
+                    attendantsCount = event.getAttendants().size();
+                    for (SmallUser attendant : event.getAttendants().values()) {
+                        if (attendant.getUid().equals(mainActivity.getUser().getUid())) {
+                            isAttendant = true;
+                            break;
+                        }
+                    }
+                }
+                if (event.getFollowers() != null) {
+                    followersCount = event.getFollowers().size();
+                    for (SmallUser follower : event.getFollowers().values()) {
+                        if (follower.getUid().equals(mainActivity.getUser().getUid())) {
+                            isFollower = true;
+                            break;
+                        }
+                    }
+                }
+
                 Button action = (Button)view.findViewById(R.id.event_going_btn);
                 if (!event.getFinished()) {
                     if (event.getOrganizer().getUid().equals(mainActivity.getUser().getUid())) {
@@ -187,29 +213,6 @@ public class ViewEventFragment extends Fragment {
                         }
                     }
                     else {
-
-                        boolean isAttendant = false;
-                        boolean isFollower = false;
-                        int followersCount = 0, attendantsCount = 0;
-                        if (event.getAttendants() != null) {
-                            attendantsCount = event.getAttendants().size();
-                            for (SmallUser attendant : event.getAttendants().values()) {
-                                if (attendant.getUid().equals(mainActivity.getUser().getUid())) {
-                                    isAttendant = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (event.getFollowers() != null) {
-                            followersCount = event.getFollowers().size();
-                            for (SmallUser follower : event.getFollowers().values()) {
-                                if (follower.getUid().equals(mainActivity.getUser().getUid())) {
-                                    isFollower = true;
-                                    break;
-                                }
-                            }
-                        }
-
                         // Set button
                         if (!isFollower && !isAttendant) {
                             if (followersCount >= event.getCapacity()) {
@@ -307,6 +310,13 @@ public class ViewEventFragment extends Fragment {
                     action.setEnabled(true);
                     action.setText("Ranikng List");
                     action.setVisibility(View.VISIBLE);
+                    action.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mainActivity.getMainFragmentManager().beginTransaction().replace(R.id.main_fragment_container, EventInfoFragment.class, arguments)
+                                    .setReorderingAllowed(true).addToBackStack(null).commit();
+                        }
+                    });
                 }
             }
         });

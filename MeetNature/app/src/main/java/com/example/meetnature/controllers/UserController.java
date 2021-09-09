@@ -23,12 +23,17 @@ import com.google.firebase.database.ServerValue;
 import com.google.type.DateTime;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 
 public class UserController {
 
@@ -59,6 +64,18 @@ public class UserController {
     public void getUser(String uid, OnSuccessListener<DataSnapshot> callback){
         Task<DataSnapshot> task = context.child(uid).get();
         task.addOnSuccessListener(callback);
+    }
+
+    public void refreshCurrentUser(OnSuccessListener<DataSnapshot> callback){
+        if (user != null){
+            context.child(user.getUid()).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+                @Override
+                public void onSuccess(DataSnapshot dataSnapshot) {
+                    user = dataSnapshot.getValue(User.class);
+                    callback.onSuccess(dataSnapshot);
+                }
+            });
+        }
     }
 
     public User getCurrentUser(){
@@ -211,6 +228,17 @@ public class UserController {
 
             context.child(user.getUid()).updateChildren(userLocationProperties);
         }
+    }
+
+    public void orderUsersByScore(OnSuccessListener callback){
+        context.orderByChild("score").get().addOnSuccessListener(dataSnapshot -> {
+            Stack<User> users = new Stack<>();
+            for (DataSnapshot userSnapshot : dataSnapshot.getChildren()){
+                User userData = userSnapshot.getValue(User.class);
+                users.push(userData);
+            }
+            callback.onSuccess(users);
+        });
     }
 
     public void setActive(){

@@ -11,7 +11,7 @@
     <ListView
         android:id="@+id/event_list_main_scroll_2"
         android:layout_width="368dp"
-        android:layout_height="658dp"
+        android:layout_height="550dp"
         android:background="#46FFFFFF"
         android:orientation="vertical"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
