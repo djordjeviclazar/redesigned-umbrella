@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.meetnature.MainActivity;
 import com.example.meetnature.R;
+import com.example.meetnature.data.models.Badges;
 import com.example.meetnature.data.models.SmallEvent;
 import com.example.meetnature.data.models.User;
 import com.example.meetnature.home.ui.useredit.EditUserProfile;
@@ -107,6 +108,15 @@ public class UserProfileFragment extends Fragment {
             EventViewAdapter adapter = new EventViewAdapter(getContext(), param);
             adapter.setOnClickListenerLinkEvent(new OnClickListenerLinkEvent(mainActivity));
             eventsListLayout.setAdapter(adapter);
+        }
+
+        if (user.getBadges() != null) {
+            Collection<Badges> badges = user.getBadges().values();
+
+            ArrayList<Badges> param = new ArrayList<>();
+            param.addAll(badges);
+            BadgeViewAdapter adapter = new BadgeViewAdapter(getContext(), param);
+            badgesListLayout.setAdapter(adapter);
         }
     }
 
