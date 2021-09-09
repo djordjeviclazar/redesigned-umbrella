@@ -36,14 +36,16 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
     private int value;
     private String tag;
     private String eventUid;
+    private String eventName;
 
-    public WinnerSpinnerAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallUser> list, int value, String tag, String eventUid) {
+    public WinnerSpinnerAdapter(@NonNull Context context, @SuppressLint("SupportAnnotationUsage") @LayoutRes ArrayList<SmallUser> list, int value, String tag, String eventUid, String eventName) {
         super(context, 0 , list);
         mainContext = context;
         attendantsList = list;
         this.value = value;
         this.tag = tag;
         this.eventUid = eventUid;
+        this.eventName = eventName;
     }
 
     @NonNull
@@ -75,6 +77,7 @@ public class WinnerSpinnerAdapter extends ArrayAdapter<SmallUser> {
                                 WinnerSpinnerAdapter.this.value,
                                 WinnerSpinnerAdapter.this.tag,
                                 eventUid,
+                                eventName,
                                 new OnSuccessListener() {
                                     @Override
                                     public void onSuccess(Object o) {

@@ -132,12 +132,13 @@ public class UserController {
         context.child(user.getUid()).child("followingEvents").child(event.getUId()).setValue(smallEvent).addOnSuccessListener(callback);
     }
 
-    public void rewardUser(String uid, int value, String tag, String eventUid, OnSuccessListener finishEvent) {
+    public void rewardUser(String uid, int value, String tag, String eventUid, String eventName, OnSuccessListener finishEvent) {
         Badges badge = new Badges();
         badge.setLevel(1);
         badge.setTag(tag);
         badge.setValue(value);
         badge.setEventUid(eventUid);
+        badge.setEventName(eventName);
 
         context.child(uid).child("score").setValue(ServerValue.increment(value));
 

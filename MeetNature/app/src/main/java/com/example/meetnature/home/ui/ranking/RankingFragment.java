@@ -1,5 +1,6 @@
 package com.example.meetnature.home.ui.ranking;
 
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.example.meetnature.data.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Stack;
 
 /**
@@ -59,6 +61,18 @@ public class RankingFragment extends Fragment {
                 ArrayList<User> usersOrdered = new ArrayList<>();
                 while (!userStack.empty()){
                     usersOrdered.add(userStack.pop());
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    usersOrdered.sort(new Comparator<User>() {
+                        @Override
+                        public int compare(User o1, User o2) {
+                            if (o1.getScore() > o2.getScore())
+                                return -1;
+                            if (o2.getScore() > o1.getScore())
+                                return 1;
+                            return 0;
+                        }
+                    });
                 }
 
                 RankingAdapter rankingAdapter = new RankingAdapter(getContext(), usersOrdered, (MainActivity) getActivity());

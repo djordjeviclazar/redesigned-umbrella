@@ -82,7 +82,7 @@ public class Three_winers_spinners extends Fragment {
                 }
                 int avgVal = sum / attendats.size();
 
-                WinnerSpinnerAdapter goldAdapter = new WinnerSpinnerAdapter(getContext(), attendats, 10 + avgVal, event.getTag(), eventUid);
+                WinnerSpinnerAdapter goldAdapter = new WinnerSpinnerAdapter(getContext(), attendats, 10 + avgVal, event.getTag(), eventUid, event.getEventName());
                 goldAdapter.setOnSuccessListener(new OnSuccessListener() {
                     @Override
                     public void onSuccess(Object o) {

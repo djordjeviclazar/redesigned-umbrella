@@ -13,7 +13,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.meetnature.R;
+import com.example.meetnature.controllers.EventController;
 import com.example.meetnature.data.models.Badges;
+import com.example.meetnature.data.models.Event;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DataSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +43,11 @@ public class BadgeViewAdapter extends ArrayAdapter<Badges> {
         }
         Badges badges = badgeList.get(position);
 
-        ((TextView)item.findViewById(R.id.badge_text_view)).setText(badges.getTag());
+        String tag = badges.getTag();
+        String icon = tag.equals("Chess") ? "♔" : (tag.equals("Football") ? "⚽" : "🏀");
+        String badgeString = badges.getEventName();
+
+        ((TextView)item.findViewById(R.id.badge_text_view)).setText(icon + "\t" + badgeString);
 
         return item;
     }
