@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.meetnature.MainActivity">
+    <item
+        android:id="@+id/home_menu_btn"
+        android:orderInCategory="101"
+        android:title="Home"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/home_menu_ranking_btn"
+        android:orderInCategory="101"
+        android:title="Ranking"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/home_logout_btn"
+        android:orderInCategory="101"
+        android:title="Logout"
+        app:showAsAction="never" />
+</menu>

@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="mnbluelight">#00CCCC</color>
+    <color name="mnbluedark">#008F8F</color>
+    <color name="mnpurplelight">#0066CC</color>
+    <color name="mnpurpledark">#003D7A</color>
+    <color name="mngray">#858585</color>
+
+
 </resources>
