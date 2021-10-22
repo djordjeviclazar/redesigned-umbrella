@@ -83,6 +83,8 @@ public class OtherProfileFragment extends Fragment {
                 ((TextView)view.findViewById(R.id.other_username_lbl)).setText(user.getUsername());
                 ((TextView)view.findViewById(R.id.other_info_lbl)).setText(user.getInfo());
 
+
+
                 if (user.getImageUrl().equals("")){
                     Picasso.get().load(taksiDoBaze.defaultImage).resize(200, 200).into((ImageView)userProfileImage);
                 }
