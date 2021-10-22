@@ -5,4 +5,4 @@ MATCH (b2:Branch)<-[rels:MERGED_INTO|BRANCH_CREATED*0..]-(b1)
 WHERE ALL(idx in range(0, size(rels)-1) WHERE ((rels[idx].CreatedAt  < pRel.Created) AND (rels[idx]).CreatedAt < (rels[idx+1]).CreatedAt))
 RETURN (b2.Name)
 
-//////////////
+////////////// Potential problem with range
