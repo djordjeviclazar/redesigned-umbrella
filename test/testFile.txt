@@ -1,1 +1,6 @@
 commit 1
+
+commit2:
+MATCH (r {Id: 350490428 })-[rel:HAS_BRANCH]->(b1:Branch {Name: 'dev'})
+MATCH (r)-[rel:HAS_BRANCH]->(b2:Branch {Name: 'main'})
+MERGE (b1)-[rel:MERGED_INTO {Id: '17915490793', CreatedAt:datetime('2021-09-09T10:54:46Z')}]->(b2)
