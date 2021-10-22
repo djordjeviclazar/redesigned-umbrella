@@ -1,0 +1,9 @@
+MATCH (r:Repo {Id: 350490428})-[:HAS_BRANCH]->(b1:Branch {Name: 'main'})
+MATCH (b1)<-[rels:MERGED_INTO|BRANCH_CREATED*0..]-(b2:Branch)<-[pRel:PUSHED_TO]-(p:PushEvent)
+WHERE ALL(idx in range(0, size(rels)-2) WHERE ((rels[idx].CreatedAt  < pRel.Created) AND (rels[idx]).CreatedAt < (rels[idx+1]).CreatedAt))
+WITH collect(b2) AS merged
+MATCH (r)-[:HAS_BRANCH]->(b3:Branch)<-[:PUSHED_TO]-(p2:PUSHED_TO)
+WHERE NOT (b3 IN merged)
+RETURN collect(p2.Id), b3.Name 
+
+// Bug with WHERE ALL 
